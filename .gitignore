@@ -1,0 +1,23 @@
+# Ignore everything without an extension:
+*
+!*.*
+!*/
+
+# Don not ignore makefiles:
+!makefile
+!Makefile
+
+# Ignore .txt files:
+*.txt
+
+# Ignore CMake files other than CMakeLists.txt:
+*CMakeCache.txt
+*CMakeFiles
+*Makefile
+*cmake_install.cmake
+
+# Ignore Python cache:
+*__pycache__/
+
+# Ignore vscode directory:
+*vscode/
