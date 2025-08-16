@@ -6,7 +6,7 @@
 
 ## Mål med lektionen
 * Kunna skapa enkla klasser i C++.
-* Känna till innebörden av orden såsom *konstruktor* och *inkapsling*.
+* Känna till innebörden av begrepp såsom *konstruktor* och *inkapsling*.
 * Kunna använda enumerationsklasser.
 
 ## Instruktioner
