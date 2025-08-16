@@ -3,7 +3,6 @@
 ## Dagordning
 * Funktionstemplates med *constraints* i C++ (återigen med vektorer).
 * Inlämningsuppgift innefattande program med vektorer i C++.
-* Installation av WSL för att kunna använda klassrepot lokalt.
 
 ## Mål med lektionen
 * Kunna implementera funktionstemplates i C++.
@@ -14,7 +13,6 @@
 * Läs om funktionstemplates i detta dokument, alternativt kolla min [video tutorial](https://www.youtube.com/watch?v=mbRiN_QmjUY).  
   ***OBS!** Denna video behandlar inte *constraints* via så kallade *type traits*, se information om detta nedan!*
 * Inlämningsuppgift 1 är tillgänglig på Classroom kl. 10:00.
-* Se instruktioner gällande installation av WSL [här](../../README.md#ladda-ned-och-installera-wsl). Jag kommer vid behov hjälpa er med installationen under lektionens gång, men har du tid får du gärna genomföra installtionen innan lektionen.
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
