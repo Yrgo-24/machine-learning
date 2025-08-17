@@ -45,6 +45,20 @@ public:
      * @brief Delete person instance.
      */
     ~Person() = default;
+
+	/**
+     * @brief Get the person's name.
+     * 
+     * @return The person's name as a string.
+     */
+    const char* name() const { return myName; }
+
+    /**
+     * @brief Get the person's age.
+     * 
+     * @return The person's age as an integer.
+     */
+    unsigned age() const { return myAge; }
 	
 	/**
 	 * @brief Get the person's gender.

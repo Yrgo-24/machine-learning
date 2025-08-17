@@ -1,10 +1,6 @@
 # Klassen *Person*
 
-Implementering av klassen *Person* i C++:
-* Filen ***person.h*** utgör det "publika interfacet", alltså det som är av intresse för "användaren", och innehåller därmed funktionsdeklarationer med tillhörande dokumentation.
-* Filen ***person.cpp*** innehåller implementationsdetaljerna i form av funktionsdefinitioner.
-
-I filen ***main.cpp*** används klassen *Person* för att lagra samt skriva ut persondata i terminalen samt till en fil döpt *person.txt.*
+Implementering av klassen *Person* i C++. Denna klass används för att lagra samt skriva ut persondata i terminalen samt till en fil döpt *person.txt.*
 
 ## Kompilering samt körning av programmet
 För att kunna kompilera koden, se till att du har GCC-kompilatorn samt *make* installerat. Installera därmed paketen *build-essential* samt *make:*
