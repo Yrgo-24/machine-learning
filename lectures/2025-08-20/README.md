@@ -11,6 +11,7 @@
 * Kolla gärna kursplan samt preliminär planering på Classroom.
 * Läs om vektorer nedan.
 * Se övningsuppgifter i underkatalogen [exercises](./exercises/README.md).
+* Lektionsanteckningar finns [här](./notes/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
