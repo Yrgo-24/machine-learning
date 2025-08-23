@@ -1,19 +1,22 @@
-# Build and run the application as default.
-default: build run
+# Application target.
+TARGET=main
 
 # Source files.
 SOURCE_FILES=source/atmega328p_led.cpp\
              source/main.cpp\
-			 source/stm32_led.cpp\
+			 source/stm32f103_led.cpp\
+
+# Build and run the application as default.
+default: build run
 
 # Build the application.
 build:
-	@g++ $(SOURCE_FILES) -Iinclude -o main -Wall -Werror
+	@g++ $(SOURCE_FILES) -Iinclude -o $(TARGET) -Wall -Werror
 
 # Run the application.
 run:
-	@./main
+	@./$(TARGET)
 
 # Clean the application.
 clean:
-	@rm -f main
+	@rm -f $(TARGET)

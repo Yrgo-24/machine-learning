@@ -1,5 +1,5 @@
 /**
- * @brief LED implementation for STM32.
+ * @brief LED implementation for STM32F103.
  */
 #pragma once
 
@@ -7,10 +7,10 @@
 
 #include "driver/led_interface.h"
 
-namespace driver::stm32
+namespace driver::stm32f103
 {
 /**
- * @brief LED interface implementation.
+ * @brief LED implementation for STM32F103.
  */
 class Led final : public LedInterface
 {
@@ -62,9 +62,9 @@ public:
 
 private:
     /**
-     * @brief Set up the LED.
+     * @brief Initialize the LED.
      */
-    void setup(const bool startVal) noexcept;
+    void init(const bool startVal) noexcept;
 
     /** The pin the LED is connected to. */
     std::uint8_t myPin;
@@ -72,4 +72,4 @@ private:
     /** Indicate whether the LED is enabled. */
     bool myIsEnabled;
 };
-} // namespace driver::stm32
+} // namespace driver::stm32f103

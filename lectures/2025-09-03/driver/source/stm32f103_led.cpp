@@ -1,19 +1,19 @@
 /**
- * @brief LED implementation details for STM32.
+ * @brief LED implementation details for STM32F103.
  */
 #include <cstdint>
 #include <iostream>
 
-#include "driver/stm32_led.h"
+#include "driver/stm32f103_led.h"
 
-namespace driver::stm32
+namespace driver::stm32f103
 {
 // -----------------------------------------------------------------------------
 Led::Led(const std::uint8_t pin, const bool startVal) noexcept
     : myPin{pin}
     , myIsEnabled{false}
 {
-    setup(startVal);
+    init(startVal);
 }
 
 // -----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ Led::~Led() noexcept
 {
     // Insert code to release allocated resources here.
     std::cout << "Deleting LED connected to pin " << static_cast<int>(myPin) 
-              << " on processor STM32!\n";
+              << " on processor STM32F103!\n";
 }
 
 // -----------------------------------------------------------------------------
@@ -43,11 +43,11 @@ void Led::setEnabled(const bool enable) noexcept
 void Led::toggle() noexcept { setEnabled(!myIsEnabled); }
 
 // -----------------------------------------------------------------------------
-void Led::setup(const bool startVal) noexcept
+void Led::init(const bool startVal) noexcept
 {
     // Insert code to initialize the hardware here.
     std::cout << "Initializing LED connected to pin " << static_cast<int>(myPin) 
-              << " on processor STM32, starting value = " << startVal << "!\n";
+              << " on processor STM32F103, starting value = " << startVal << "!\n";
     setEnabled(startVal);
 }
-} // namespace driver::stm32
+} // namespace driver::stm32f103

@@ -10,7 +10,7 @@
 namespace driver::atmega328p
 {
 /**
- * @brief LED interface implementation.
+ * @brief LED implementation for ATmega328P.
  */
 class Led final : public LedInterface
 {
