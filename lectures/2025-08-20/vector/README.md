@@ -11,8 +11,7 @@ För att kunna kompilera koden, se till att du har GCC-kompilatorn samt *make* i
 
 ```bash
 sudo apt -y update
-sudo apt -y install build-essential
-sudo apt -y install make
+sudo apt -y install build-essential make
 ```
 
 Tack vara den bifogade makefilen kan du sedan när som helst kompilera och köra programmet via följande kommando (i denna katalog):
