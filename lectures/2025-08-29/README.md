@@ -12,7 +12,7 @@
 
 ## Instruktioner
 * Läs fördjupad information om klasser i detta dokument.
-* Inlämningsuppgift 1 är tillgänglig på Classroom kl. 10:00.
+* Inlämningsuppgift 2 är tillgänglig på Classroom kl. 10:00.
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
