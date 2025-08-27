@@ -26,7 +26,6 @@ int_vector_t* int_vector_new(void);
  */
 void int_vector_delete(int_vector_t** self);
 
-
 /**
  * @brief Get the data of the vector.
  * 
