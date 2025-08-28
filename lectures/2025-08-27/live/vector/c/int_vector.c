@@ -1,8 +1,8 @@
 /**
  * @brief Int vector implementation details.
  */
-#include <stdlib.h> // For realloc and free.
-#include <stdio.h>  // For printf.
+#include <stdlib.h> // For functions malloc, realloc and free.
+#include <stdio.h>  // For function printf.
 
 #include "int_vector.h"
 
@@ -28,6 +28,8 @@ int_vector_t* int_vector_new(void)
     self->data = NULL;
     self->size = 0U;
 
+    printf("New vector created!\n");
+
     // Return a pointer to the vector.
     return self;
 }
@@ -39,8 +41,14 @@ void int_vector_delete(int_vector_t** self)
     if (self && *self)
     {
         printf("Delete the vector!\n");
+
+        // Empty the vector (without deleting the vector itself).
         int_vector_clear(*self);
+
+        // Free the memory allocated for the vector instance.
         free(*self);
+
+        // Set the associated pointer to NULL.
         *self = NULL;
     }
 }
@@ -68,6 +76,13 @@ void int_vector_clear(int_vector_t* self)
     // Reinitialize the member, the vector is now empty.
     self->data = NULL;
     self->size = 0U;
+}
+
+// -----------------------------------------------------------------------------
+bool int_vector_empty(const int_vector_t* self)
+{
+    // Return true if the vector contains no elements.
+    return 0U == self->size;
 }
 
 // -----------------------------------------------------------------------------
