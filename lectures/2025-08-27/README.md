@@ -12,6 +12,7 @@
 ## Instruktioner
 * Läs om klasser i detta dokument.
 * Se övningsuppgifter i underkatalogen *exercises*.
+* Anteckningar finns [här](./notes/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
