@@ -12,7 +12,7 @@
 
 ## Instruktioner
 * Läs fördjupad information om klasser i detta dokument.
-* Ni kommer få möjlighet att arbeta med inlämningsuppgift 2 under lektionen.
+* Lektionsanteckningar finns [här](./libatmega/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
