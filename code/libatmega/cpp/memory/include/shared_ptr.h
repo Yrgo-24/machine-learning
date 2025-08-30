@@ -21,21 +21,21 @@ public:
     /**
      * @brief Create new shared pointer.
      * 
-     * @param data Pointer to data for which to take ownership (default = none).
+     * @param[in] data Pointer to data for which to take ownership (default = none).
      */
     SharedPtr(T* data = nullptr) noexcept;
 
     /**
      * @brief Create new shared pointer, which shares ownership with another pointer.
      * 
-     * @param other Reference to other shared pointer to copy from.
+     * @param[in] other Reference to other shared pointer to copy from.
      */
     SharedPtr(const SharedPtr<T>& other) noexcept;
 
     /**
      * @brief Create new shared pointer, which takes ownership over memory owned by other pointer.
      * 
-     * @param other Reference to other shared pointer to move memory from.
+     * @param[in] other Reference to other shared pointer to move memory from.
      */
     SharedPtr(SharedPtr<T>&& other) noexcept;
 
@@ -49,7 +49,7 @@ public:
     /**
      * @brief Copy resources from other shared pointer.
      * 
-     * @param other Reference to other shared pointer to copy from.
+     * @param[in] other Reference to other shared pointer to copy from.
      * 
      * @return Reference to this shared pointer.
      */
@@ -58,7 +58,7 @@ public:
     /**
      * @brief Move resources from other shared pointer.
      * 
-     * @param other Reference to other shared pointer to move memory from.
+     * @param[in] other Reference to other shared pointer to move memory from.
      * 
      * @return Reference to this shared pointer.
      */
@@ -67,7 +67,7 @@ public:
     /**
      * @brief Check if the pointer isn't null.
      * 
-     * @return True if the pointer isn't null, otherwise false.
+     * @return True if the pointer isn't null, false otherwise.
      */
     operator bool() const;
 
@@ -116,7 +116,7 @@ public:
     /**
      * @brief Reset shared pointer by releasing currently held data.
      * 
-     * @param newData Pointer to new data to take ownership over (default = none).
+     * @param[in] newData Pointer to new data to take ownership over (default = none).
      */
     void reset(T* newData = nullptr) noexcept;
 
@@ -143,7 +143,7 @@ private:
  * @tparam T The pointer type.
  * @tparam Args The types of arguments to pass to the constructor of T.
  * 
- * @param args The arguments to pass to the constructor of T.
+ * @param[in] args The arguments to pass to the constructor of T.
  * 
  * @return Shared pointer holding ownership over given data.
  */

@@ -13,7 +13,7 @@ namespace container
 /**
  * @brief Implementation of node holding data in a linked list.
  * 
- * @param T The node type, i.e. the type of the stored data.
+ * @param[in] T The node type, i.e. the type of the stored data.
  */
 template <typename T>
 struct List<T>::Node 
@@ -73,7 +73,7 @@ List<T>::List(List<T>&& other) noexcept
 {
     other.myFirst = nullptr;
     other.myLast  = nullptr;
-    other.mySize  = 0U;
+    other.mySize = 0U;
 }
 
 // -----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ List<T>::List<T>& operator=(List<T>&& other) noexcept
 
     other.myFirst = nullptr;
     other.myLast  = nullptr;
-    other.mySize  = 0U;
+    other.mySize = 0U;
     return *this;
 }
 
@@ -136,7 +136,7 @@ void List<T>::clear() noexcept
     removeAllNodes();
     myFirst = nullptr;
     myLast  = nullptr;
-    mySize  = 0U;
+    mySize = 0U;
 }
 
 // -----------------------------------------------------------------------------

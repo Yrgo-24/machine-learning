@@ -32,37 +32,37 @@ public:
     /**
      * @brief Add new callback routine at given index of callback array.
      *
-     * @param callback Reference to the callback routine to add.
-     * @param index    Storage index of callback routine.
+     * @param[in] callback Reference to the callback routine to add.
+     * @param[in] index    Storage index of callback routine.
      *
-     * @return True if the callback routine was added, otherwise false.
+     * @return True if the callback routine was added, false otherwise.
      */
     bool add(void (*callback)(), const size_t index) noexcept;
 
      /**
      * @brief Remove callback routine at given index of callback array.
      *
-     * @param index Storage index of callback routine.
+     * @param[in] index Storage index of callback routine.
      *
-     * @return True if the callback routine was removed, otherwise false.
+     * @return True if the callback routine was removed, false otherwise.
      */
     bool remove(const size_t index) noexcept;
 
      /**
      * @brief Remove given callback routine from the callback array.
      *
-     * @param callback Reference to the callback routine to remove.
+     * @param[in] callback Reference to the callback routine to remove.
      *
-     * @return True if the callback routine was removed, otherwise false.
+     * @return True if the callback routine was removed, false otherwise.
      */
     bool remove(void (*callback)(), const size_t index) noexcept;
 
      /**
      * @brief Invoke callback at given index of callback array.
      *
-     * @param index Storage index of callback routine to call.
+     * @param[in] index Storage index of callback routine to call.
      *
-     * @return True if the callback routine was called, otherwise false.
+     * @return True if the callback routine was called, false otherwise.
      */
     bool invoke(const size_t index) noexcept;
 

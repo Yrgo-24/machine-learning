@@ -1,86 +1,85 @@
 /**
- * @brief Driver for serial transmission via UART on ATmega328P.
+ * @brief Serial driver for ATmega328P.
  */
 #pragma once
 
-#include "utils.h"
+#include <stdint.h>
+
 #include "serial_interface.h"
 
-namespace driver 
+namespace driver
 {
 namespace atmega328p
 {
-
 /**
- * @brief Class for implementation of ATmega328P serial device driver.
+ * @brief Serial driver for ATmega328P.
  * 
- *        This class is non-copyable.
+ *        Use the singleton design pattern to ensure only one serial device instance exists,
+ *        reflecting the hardware limitation of a single serial port on the MCU.
  */
-class Serial : public SerialInterface
+class Serial final : public SerialInterface
 {
 public:
-
     /**
-     * @brief Create new serial device with a 9600 baud rate.
+     * @brief Get the singleton serial instance.
      * 
-     * @param enable Indicate whether to enable serial transmission (default = true).
+     * @return Reference to the singleton serial instance.
      */
-    explicit Serial(const bool enable = true) noexcept;
+    static SerialInterface& getInstance() noexcept;
 
-    /**
-     * @brief Delete serial device.
-     */
-    ~Serial() noexcept override = default;
-
-    /**
-     * @brief Move memory from another serial device.
-     *
-     *        The other device is cleared once the move operation is completed.
-     *
-     * @param other Reference to serial device to move memory from.
-     */
-    Serial(Serial&& other) noexcept;
-
-    /**
-     * @brief Move content from another serial device.
+    /** 
+     * @brief Get the baud rate of the serial device. 
      * 
-     *        The other device is cleared once the move operation is completed.
-     *
-     * @param other Reference to serial device holding the data to move. 
-     * 
-     * @return Reference to this serial device.
+     * @return The baud rate in bps (bits per second).
      */
-    Serial& operator=(Serial&& other) noexcept;
+    uint32_t baudRate_bps() const override;
 
     /**
      * @brief Check whether the serial device is initialized.
      * 
-     * @return True if the device is initialized, otherwise false.
+     * @return True if the device is initialized, false otherwise.
      */
     bool isInitialized() const noexcept override;
 
     /**
      * @brief Check whether the serial device is enabled.
      * 
-     * @return True if the serial device is enabled, otherwise false.
+     * @return True if the serial device is enabled, false otherwise.
      */
     bool isEnabled() const noexcept override;
 
     /**
      * @brief Set enablement of serial device.
      * 
-     * @param enable Indicate whether to enable the device.
+     * @param[in] enable Indicate whether to enable the device.
      */
     void setEnabled(const bool enable) noexcept override;
 
-    Serial(const Serial&)            = delete; // No copy constructor.
-    Serial& operator=(const Serial&) = delete; // No copy assignment.
+    Serial(const Serial&)                      = delete; // No copy constructor.
+    Serial(Serial&& other) noexcept            = delete; // No move constructor.
+    Serial& operator=(const Serial&)           = delete; // No copy assignment.
+    Serial& operator=(Serial&& other) noexcept = delete; // No move assignment.
 
 private:
-    void print(const char* message) const noexcept override;
+    /**
+     * @brief Create new serial device.
+     */
+    Serial() noexcept;
 
-    bool myEnabled; // Indicate whether serial transmission is enabled.
+    /**
+     * @brief Delete the serial device.
+     */
+    ~Serial() noexcept override = default;
+
+    /**
+     * @brief Print the given string in the serial terminal.
+     * 
+     * @param[in] str The string to print.
+     */
+    void print(const char* str) const noexcept override;
+
+    /** Indicate whether serial transmission is enabled. */
+    bool myEnabled;
 };
-
 } // namespace atmega328p
 } // namespace driver

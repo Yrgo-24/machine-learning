@@ -28,7 +28,7 @@ public:
     /**
      * @brief Create vector of given size.
      *
-     * @param size The size of vector, i.e. the number of elements it can hold.
+     * @param[in] size The size of vector, i.e. the number of elements it can hold.
      */
     explicit Vector(const size_t size) noexcept;
 
@@ -37,7 +37,7 @@ public:
      *
      * @tparam Values Parameter pack containing values.
      * 
-     * @param values The values to add to the vector.
+     * @param[in] values The values to add to the vector.
      */
     template <typename... Values>
     explicit Vector(const Values&&... values) noexcept;
@@ -45,7 +45,7 @@ public:
     /**
      * @brief Create vector as a copy of another vector.
      *
-     * @param other Reference to other vector to copy from.
+     * @param[in] other Reference to other vector to copy from.
      */
     Vector(const Vector<T>& other) noexcept;
 
@@ -54,7 +54,7 @@ public:
      * 
      *        The other vector is emptied once the move operation is completed.
      *
-     * @param other Reference to other vector to move memory from.
+     * @param[in] other Reference to other vector to move memory from.
      */
     Vector(Vector&& other) noexcept;
 
@@ -68,7 +68,7 @@ public:
      * 
      *        Previous values are cleared before copying.
      *
-     * @param other Reference to vector holding the data to copy.
+     * @param[in] other Reference to vector holding the data to copy.
      * 
      * @return Reference to this vector.
      */
@@ -81,7 +81,7 @@ public:
      * 
      *        The other vector is emptied once the move operation is completed.
      *
-     * @param other Reference to vector holding the data to move. 
+     * @param[in] other Reference to vector holding the data to move. 
      * 
      * @return Reference to this vector.
      */
@@ -94,7 +94,7 @@ public:
      *
      * @tparam Values Type of the given values.
      * 
-     * @param values Reference to given values.
+     * @param[in] values Reference to given values.
      * 
      * @return Reference to this vector.
      */
@@ -104,7 +104,7 @@ public:
     /**
      * @brief Add values from another vector.
      *
-     * @param other Reference to vector holding the values to add.
+     * @param[in] other Reference to vector holding the values to add.
      * 
      * @return Reference to this vector.
      */
@@ -115,7 +115,7 @@ public:
      *
      * @tparam ValueCount The number of values to add.
      * 
-     * @param values Reference to the values to add.
+     * @param[in] values Reference to the values to add.
      * 
      * @return Reference to this vector.
      */
@@ -125,7 +125,7 @@ public:
     /**
      * @brief Get element at given index in the vector.
      *
-     * @param index Index of requested element.
+     * @param[in] index Index of requested element.
      * 
      * @return Reference to the element at given index.
      */
@@ -134,7 +134,7 @@ public:
     /**
      * @brief Get element at given index in the vector.
      *
-     * @param index Index of requested element.
+     * @param[in] index Index of requested element.
      * 
      * @return Reference to the element at given index.
      */
@@ -157,7 +157,7 @@ public:
     /**
      * @brief Check if the vector is empty.
      *
-     * @return True if the vector vector is empty, otherwise false.
+     * @return True if the vector vector is empty, false otherwise.
      */
     bool empty() const noexcept;
 
@@ -239,25 +239,25 @@ public:
     /**
      * @brief Resize the vector to given new size.
      *
-     * @param newSize The new size of vector.
+     * @param[in] newSize The new size of vector.
      * 
-     * @return True if the vector was resized, otherwise false.
+     * @return True if the vector was resized, false otherwise.
      */
     bool resize(const size_t newSize) noexcept;
 
     /**
      * @brief Push new value to the back of vector.
      *
-     * @param value Reference to the new value to push to the vector.
+     * @param[in] value Reference to the new value to push to the vector.
      * 
-     * @return True if the value was pushed to the back of vector, otherwise false.
+     * @return True if the value was pushed to the back of vector, false otherwise.
      */
     bool pushBack(const T& value) noexcept;
 
     /** 
      * @brief Pop value at the back of vector noexcept.
      *
-     * @return True if the last value of vector was popped, otherwise false.
+     * @return True if the last value of vector was popped, false otherwise.
      */
     bool popBack();
 

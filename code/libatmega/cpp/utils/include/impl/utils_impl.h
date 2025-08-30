@@ -23,12 +23,6 @@ constexpr T&& forward(typename RemoveReference<T>::type&& object) noexcept
 }
 
 // -----------------------------------------------------------------------------
-inline void globalInterruptEnable() noexcept { asm("SEI"); }
-
-// -----------------------------------------------------------------------------
-inline void globalInterruptDisable() noexcept { asm("CLI"); }
-
-// -----------------------------------------------------------------------------
 template <typename T>
 constexpr void set(volatile T& reg, const uint8_t bit) noexcept
 {
@@ -111,11 +105,20 @@ T3 power(const T1 base, const T2 exponent) noexcept
 
 // -----------------------------------------------------------------------------
 template <typename T1, typename T2>
-constexpr T1 round(const T2 value) noexcept 
+constexpr T1 round(const T2 number) noexcept 
 {
     static_assert(type_traits::is_integral<T1>::value && type_traits::is_arithmetic<T2>::value, 
                   "Rounding only possible for arithmetic types!");
-    return static_cast<T1>(value + 0.5);
+    return static_cast<T1>(number + 0.5);
+}
+
+// -----------------------------------------------------------------------------
+template <typename T>
+constexpr bool inRange(const T number, const T min, const T max) noexcept
+{
+    static_assert(type_traits::is_arithmetic<T>::value, 
+        "Range checks are only supported for arithmetic types!");
+    return ((min <= number) && (max >= number));
 }
 
 // -----------------------------------------------------------------------------

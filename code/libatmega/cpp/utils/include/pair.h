@@ -28,15 +28,15 @@ struct Pair
     /**
      * @brief Create pair containing given values.
      *
-     * @param first  Reference to the first value of pair.
-     * @param second Reference to the second value of pair.
+     * @param[in] first  Reference to the first value of pair.
+     * @param[in] second Reference to the second value of pair.
      */
     explicit Pair(const T1& first, const T2& second) noexcept;
 
     /**
      * @brief Create copy of other pair.
      * 
-     * @param other Reference to other pair to copy from.
+     * @param[in] other Reference to other pair to copy from.
      */
     Pair(const Pair<T1, T2>& other) noexcept;
 
@@ -45,7 +45,7 @@ struct Pair
      * 
      *        The other pair is emptied once the new pair has taken ownership over the data.
      * 
-     * @param other Reference to other pair to move data from.
+     * @param[in] other Reference to other pair to move data from.
      */
     Pair(Pair<T1, T2>&& other) noexcept;
 
@@ -57,7 +57,7 @@ struct Pair
     /**
      * @brief Copy data from other pair.
      * 
-     * @param other Reference to other pair to copy from.
+     * @param[in] other Reference to other pair to copy from.
      * 
      * @return Reference to this pair.
      */
@@ -68,7 +68,7 @@ struct Pair
      * 
      *        The other pair is emptied once the new pair has taken ownership over the data.
      * 
-     * @param other Reference to other pair to move data from.
+     * @param[in] other Reference to other pair to move data from.
      * 
      * @return Reference to this pair.
      */

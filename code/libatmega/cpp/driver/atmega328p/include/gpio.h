@@ -1,9 +1,9 @@
 /**
- * @brief Driver for miscellaneous GPIO devices on ATmega328P.
+ * @brief GPIO driver for ATmega328P.
  */
 #pragma once
 
-#include "utils.h"
+#include <stdint.h>
 
 #include "gpio_interface.h"
 
@@ -11,136 +11,122 @@ namespace driver
 {
 namespace atmega328p
 {
-
 /**
- * @brief Class for generic ATmega328P GPIO driver.
+ * @brief GPIO driver for ATmega328P.
  * 
- *        This class is non-copyable.
+ *        This class is non-copyable and non-movable.
  */
-class Gpio : public GpioInterface
+class Gpio final : public GpioInterface
 {
 public:
+    /** Port aliases for GPIO pins. */
+    struct Port;
 
-    struct Port;          // Port aliases for GPIO pins.
-    enum class Direction; // Representation of GPIO direction.
-    enum class IoPort;    // Representation of I/O ports.
+    /** Enumeration of GPIO directions. */
+    enum class Direction : uint8_t;
+
+    /** Enumeration of I/O ports. */
+    enum class IoPort : uint8_t;
 
     /**
-     * @brief Create new GPIO device.
+     * @brief Create a new GPIO.
      *
-     * @param pin       The PIN number of device.
-     * @param direction The direction of device.
-     * @param callback  Function pointer to callback associated with the device (default = none).
+     * @param[in] pin The pin number of the GPIO.
+     * @param[in] direction The GPIO direction.
+     * @param[in] callback Callback associated with the GPIO (default = none).
      */
-    Gpio(const uint8_t pin, const Direction direction, void (*callback)() = nullptr) noexcept;
+    explicit Gpio(const uint8_t pin, const Direction direction, 
+        void (*callback)() = nullptr) noexcept;
 
     /**
-     * @brief Delete GPIO device.
+     * @brief Delete the GPIO.
      */
     ~Gpio() noexcept override;
 
     /**
-     * @brief Move memory from another GPIO device.
+     * @brief Get the pin number of the GPIO.
      *
-     *        The other device is cleared once the move operation is completed.
-     *
-     * @param other Reference to GPIO device to move memory from.
+     * @return The pin number of the GPIO.
      */
-    Gpio(Gpio&& other) noexcept;
+    uint8_t operator()() const noexcept;
 
     /**
-     * @brief Move content from another GPIO device.
-     * 
-     *        The other device is cleared once the move operation is completed.
+     * @brief Get the pin number of the GPIO.
      *
-     * @param other Reference to GPIO device holding the data to move. 
-     * 
-     * @return Reference to this GPIO device.
+     * @return The pin number of the GPIO.
      */
-    Gpio& operator=(Gpio&& other) noexcept;
+    uint8_t pin() const noexcept;
 
     /**
-     * @brief Get the pin number of the device.
+     * @brief Get I/O port associated with the GPIO.
      *
-     * @return The pin number of device.
-     */
-    uint8_t operator()() noexcept;
-
-    /**
-     * @brief Get the pin number of the device.
-     *
-     * @return The pin number of device.
-     */
-     uint8_t pin() const noexcept;
-
-    /**
-     * @brief Get I/O port associated with the device.
-     *
-     * @return The I/O port associated with the device as an enumerator of enum IoPort.
+     * @return The I/O port associated with the GPIO as an enumerator of enum IoPort.
      */
     IoPort port() const noexcept;
 
     /**
-     * @brief Check whether the device is initialized.
+     * @brief Check whether the GPIO is initialized.
      * 
-     *        An uninitialized device indicates that the specified PIN was unavailable or invalid
-     *        when the device was created.
+     *        An uninitialized GPIO indicates that the specified PIN was unavailable or invalid
+     *        when the GPIO was created.
      * 
-     * @return True if the device is initialized, otherwise false.
+     * @return True if the GPIO is initialized, false otherwise.
      */
     bool isInitialized() const noexcept override;
 
     /**
-     * @brief Read input of device.
+     * @brief Read input of the GPIO.
      * 
-     * @return True if the input is high, otherwise false.
+     * @return True if the input is high, false otherwise.
      */
     bool read() const noexcept override;
 
     /**
-     * @brief Write output to device.
+     * @brief Write output to the GPIO.
      * 
-     * @param output The output value to write (true = high, false = low).
+     * @param[in] output The output value to write (true = high, false = low).
      */
     void write(const bool output) noexcept override;
 
     /**
-     * @brief Toggle device output.
+     * @brief Toggle the output of the GPIO.
      *        
-     * @note This operation is only permitted for pins set to output.
+     * @note This operation is only supported for pins set to output.
      */
     void toggle() noexcept override;
 
     /**
-     * @brief Enable/disable pin change interrupt for device.
+     * @brief Enable/disable pin change interrupt for the GPIO.
      * 
-     * @param enable Indicate whether to enable pin change interrupt for the device.
+     * @param[in] enable True to enable pin change interrupt for the GPIO, false otherwise.
      */
     void enableInterrupt(const bool enable) noexcept override;
 
     /**
-     * @brief Enable pin change interrupt for I/O port associated with the device.
+     * @brief Enable pin change interrupt for I/O port associated with the GPIO.
      * 
-     * @param enable Indicate whether to enable pin change interrupt for the I/O port.
+     * @param[in] enable True to enable pin change interrupt for the I/O port, false otherwise.
      */
     void enableInterruptOnPort(const bool enable) noexcept override;
 
     /**
-     * @brief Blink output of device with given blink speed.
+     * @brief Blink output of the GPIO with the given blink speed.
      *
-     * @param blinkSpeedMs Reference to variable holding the blink speed in milliseconds.
+     * @param[in] blinkSpeedMs The blink speed in milliseconds.
      * 
-     * @note This operation is only permitted for pins set to output.
+     * @note This operation is only supported for pins set to output.
      */
-    void blink(const uint16_t& blink_speed_ms) noexcept;
+    void blink(const uint16_t& blinkSpeed_ms) noexcept;
     
     Gpio()                       = delete; // No default constructor.
     Gpio(const Gpio&)            = delete; // No copy constructor.
+    Gpio(Gpio&&)                 = delete; // No move constructor.
     Gpio& operator=(const Gpio&) = delete; // No copy assignment.
+    Gpio& operator=(Gpio&&)      = delete; // No move assignment.
 
-  private:
-
-    struct Hardware; // Structure for implementation of GPIO hardware.
+private:
+    /** GPIO hardware structure. */
+    struct Hardware;
 
     static Hardware* reserve(const uint8_t pin, const Direction direction) noexcept;
     static Hardware* initHardware(const uint8_t pin) noexcept;
@@ -148,16 +134,24 @@ public:
     void setDirection(const Direction direction) noexcept;
     void setCallback(void (*callback)()) const noexcept;
 
-    void disable() noexcept;
+    /** Hardware structure for I/O port B. */
+    static Hardware myHwPortB;
+    
+    /** Hardware structure for I/O port C. */
+    static Hardware myHwPortC;
 
-    static Hardware myHwPortB, myHwPortC, myHwPortD; // Pointer to GPIO hardware for each I/O port.
+    /** Hardware structure for I/O port D. */
+    static Hardware myHwPortD;
 
-    Hardware* myHardware; // Pointer to GPIO hardware.
-    uint8_t myPin;        // Pin the device is connected to.
+    /** Hardware structure associated with the GPIO. */
+    Hardware* myHardware;
+
+    /** Pin the GPIO is connected to. */
+    uint8_t myPin;
 };
 
 /**
- * @brief Struct containing port aliases for each pin.
+ * @brief Port aliases for GPIO pins.
  * 
  *        - Pins 0 - 7 are associated with I/O port D.
  * 
@@ -192,9 +186,9 @@ struct Gpio::Port
 };
 
 /**
- * @brief Enumeration class representing the possible data directions for GPIO devices.
+ * @brief Enumeration of GPIO directions.
  */
-enum class Gpio::Direction
+enum class Gpio::Direction : uint8_t
 { 
     Input,       // Input without internal pull-up resistor enabled (tri-state).
     InputPullup, // Input with internal pull-up resistor enabled.
@@ -203,15 +197,14 @@ enum class Gpio::Direction
 };
 
 /**
- * @brief Enumeration class representing the I/O ports associated with the devices.
+ * @brief Enumeration of I/O ports.
 */
-enum class Gpio::IoPort 
+enum class Gpio::IoPort : uint8_t
 {
-    B = PCIE0, // I/O port B.
-    C = PCIE1, // I/O port C.
-    D = PCIE2, // I/O port D.
-    Count,     // The number of I/O ports available.
+    B,     // I/O port B.
+    C,     // I/O port C.
+    D,     // I/O port D.
+    Count, // The number of I/O ports available.
 };
-
 } // namespace atmega328p
 } // namespace driver

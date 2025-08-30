@@ -1,5 +1,5 @@
 /**
- * @brief Implementation of GPIO interface.
+ * @brief GPIO interface.
  */
 #pragma once
 
@@ -7,61 +7,58 @@
 
 namespace driver
 {
-
 /**
- * @brief Class for implementation of GPIO interface.
+ * @brief GPIO interface.
  */
 class GpioInterface
 {
 public:
-
     /** 
-     * @brief Delete GPIO device.
+     * @brief Delete the GPIO.
      */
     virtual ~GpioInterface() noexcept = default;
 
     /**
-     * @brief Check whether the device is initialized.
+     * @brief Check whether the GPIO is initialized.
      * 
      *        An uninitialized device indicates that the specified PIN was unavailable or invalid
      *        when the device was created.
      * 
-     * @return True if the device is initialized, otherwise false.
+     * @return True if the device is initialized, false otherwise.
      */
-    virtual bool isInitialized() const noexcept = 0;
+    virtual bool isInitialized() const = 0;
 
     /**
-     * @brief Read input of device.
+     * @brief Read input of the GPIO.
      * 
-     * @return True if the input is high, otherwise false.
+     * @return True if the input is high, false otherwise.
      */
-    virtual bool read() const noexcept = 0;
+    virtual bool read() const = 0;
 
     /**
-     * @brief Write output to device.
+     * @brief Write output to the GPIO.
      * 
-     * @param output The output value to write (true = high, false = low).
+     * @param[in] output The output value to write (true = high, false = low).
      */
-    virtual void write(const bool output) noexcept = 0;
+    virtual void write(const bool output) = 0;
 
     /**
-     * @brief Toggle device output.
+     * @brief Toggle the output of the GPIO.
      */
-    virtual void toggle() noexcept = 0;
+    virtual void toggle() = 0;
 
     /**
-     * @brief Enable/disable pin change interrupt for device.
+     * @brief Enable/disable pin change interrupt for the GPIO.
      * 
-     * @param enable Indicate whether to enable pin change interrupt for the device.
+     * @param[in] enable True to enable pin change interrupt for the GPIO, false otherwise.
      */
-    virtual void enableInterrupt(const bool enable) noexcept = 0;
+    virtual void enableInterrupt(const bool enable) = 0;
 
     /**
-     * @brief Enable pin change interrupt for I/O port associated with the device.
+     * @brief Enable pin change interrupt for I/O port associated with the GPIO.
      * 
-     * @param enable Indicate whether to enable pin change interrupt for the I/O port.
+     * @param[in] enable True to enable pin change interrupt for the I/O port, false otherwise.
      */
-    virtual void enableInterruptOnPort(const bool enable) noexcept = 0;
+    virtual void enableInterruptOnPort(const bool enable) = 0;
 };
-
 } // namespace driver

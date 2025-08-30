@@ -1,5 +1,5 @@
 /**
- * @brief Implementation of ATmega328P EEPROM stream.
+ * @brief EEPROM stream for ATmega328P.
  */
 #pragma once
 
@@ -11,79 +11,57 @@ namespace driver
 {
 namespace atmega328p
 {
-
 /**
- * @brief Class for implementation of ATmega328P EEPROM stream.
+ * @brief EEPROM stream for ATmega328P.
  * 
- *        This class is non-copyable.
+ *        Use the singleton design pattern to ensure only one ADC instance exists,
+ *        reflecting the hardware limitation of a single ADC on the MCU.
  */
-class Eeprom : public EepromInterface
+class Eeprom final : public EepromInterface
 {
 public:
-
     /**
-     * @brief Create new EEPROM stream.
+     * @brief Get the singleton EEPROM instance.
      * 
-     * @param enable Indicate whether to enable serial transmission (default = true).
+     * @return Reference to the singleton EEPROM instance.
      */
-    explicit Eeprom(const bool enable = true) noexcept;
-
-    /**
-     * @brief Delete EEPROM stream.
-     */
-    ~Eeprom() noexcept override = default;
-
-      /**
-     * @brief Move memory from another EEPROM stream.
-     *
-     *        The other EEPROM stream is cleared once the move operation is completed.
-     *
-     * @param other Reference to EEPROM stream to move memory from.
-     */
-    Eeprom(Eeprom&& other) noexcept;
-
-    /**
-     * @brief Move content from another EEPROM stream.
-     * 
-     *        The other EEPROM stream is cleared once the move operation is completed.
-     *
-     * @param other Reference to EEPROM stream holding the data to move. 
-     * 
-     * @return Reference to this EEPROM stream.
-     */
-    Eeprom& operator=(Eeprom&& other) noexcept;
+    static EepromInterface& getInstance() noexcept;
 
     /**
      * @brief Check whether the EEPROM stream is initialized.
      * 
-     * @return True if the EEPROM stream is initialized, otherwise false.
+     * @return True if the EEPROM stream is initialized, false otherwise.
      */
     bool isInitialized() const noexcept override;
 
     /**
      * @brief Indicate whether the EEPROM stream is enabled.
      * 
-     * @return True if the EEPROM stream is enabled, otherwise false.
+     * @return True if the EEPROM stream is enabled, false otherwise.
      */
     bool isEnabled() const noexcept override;
 
     /**
      * @brief Set enablement of EEPROM stream.
      * 
-     * @param enable Indicate whether to enable the EEPROM stream.
+     * @param[in] enable Indicate whether to enable the EEPROM stream.
      */
     void setEnabled(const bool enable) noexcept override;
 
     Eeprom(const Eeprom&)            = delete; // No copy constructor.
+    Eeprom(Eeprom&&)                 = delete; // No move constructor.
     Eeprom& operator=(const Eeprom&) = delete; // No copy assignment.
+    Eeprom& operator=(Eeprom&&)      = delete; // No move assignment.
 
 private: 
+    Eeprom() noexcept;
+    ~Eeprom() noexcept override = default;
     bool isAddressValid(const uint16_t address, const uint8_t dataSize) const noexcept override;
     void writeByte(const uint16_t address, const uint8_t data) const noexcept override;
     uint8_t readByte(const uint16_t address) const noexcept override;
 
-    bool myEnabled; // Indicate whether the EEPROM stream is enabled.
+    /** Indicate whether the EEPROM stream is enabled. */
+    bool myEnabled;
 };
-
 } // namespace atmega328p
 } // namespace driver

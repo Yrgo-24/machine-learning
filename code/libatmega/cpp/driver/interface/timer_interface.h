@@ -1,5 +1,5 @@
 /**
- * @brief Implementation of timer interface.
+ * @brief Timer interface.
  */
 #pragma once
 
@@ -9,76 +9,75 @@ namespace driver
 {
 
 /**
- * @brief Class for implementation of timer interface.
+ * @brief Timer interface.
  */
 class TimerInterface
 {
 public:
 
     /**
-     * @brief Delete timer.
+     * @brief Delete the timer.
      */
     virtual ~TimerInterface() noexcept = default;
 
     /**
      * @brief Check if the timer is initialized.
      * 
-     *        An uninitialized timer indicates that no timer circuit
-     *        was available when the timer was created.
+     *        An uninitialized timer indicates that no timer circuit was available when the timer 
+     *        was created.
      * 
-     * @return True if the timer is initialized, otherwise false.
+     * @return True if the timer is initialized, false otherwise.
      */
-    virtual bool isInitialized() const noexcept = 0;
+    virtual bool isInitialized() const = 0;
 
     /**
-     * @brief Check if the timer is enabled.
-     * 
-     * @return True if the timer is enabled, otherwise false.
-     */
-    virtual bool isEnabled() const noexcept = 0;
-
-    /**
-     * @brief Check if the timer has elapsed.
-     * 
-     *        The timer restarts when it elapses.
+     * @brief Check whether the timer is enabled.
      *
-     * @return True if the counter has elapsed, otherwise false.
+     * @return True if the timer is enabled, false otherwise.
      */
-    virtual bool hasElapsed() noexcept = 0;
- 
+    virtual bool isEnabled() const = 0;
+
     /**
-     * @brief Get the elapse time of the timer.
+     * @brief Check whether the timer has timed out.
      * 
-     * @return The elapse time of the timer in milliseconds.
+     *        The timer will restart automatically on timeout.
+     *
+     * @return True if the timer has timed out, false otherwise.
      */
-    virtual uint32_t elapseTimeMs() const noexcept = 0;
+    virtual bool hasTimedOut() = 0;
 
     /**
-     * @brief Set elapse time of the timer.
+     * @brief Get the timeout of the timer.
      * 
-     * @param elapseTimeMs The new elapse time of the timer in milliseconds.
+     * @return The timeout in milliseconds.
      */
-    virtual void setElapseTimeMs(const uint32_t elapseTimeMs) noexcept = 0;
+    virtual uint32_t timeout_ms() const = 0;
 
     /**
-     * @brief Start timer.
+     * @brief Set timeout of the timer.
+     * 
+     * @param[in] timeout_ms The new timeout in milliseconds.
      */
-    virtual void start() noexcept = 0;
+    virtual void setTimeout_ms(const uint32_t timeout_ms) = 0;
 
     /**
-     * @brief Stop timer.
+     * @brief Start the timer.
      */
-    virtual void stop() noexcept = 0;
+    virtual void start() = 0;
 
     /**
-     * @brief Toggle timer.
+     * @brief Stop the timer.
      */
-    virtual void toggle() noexcept = 0;
+    virtual void stop() = 0;
 
     /**
-     * @brief Restart timer.
+     * @brief Toggle the timer.
      */
-    virtual void restart() noexcept = 0;
+    virtual void toggle() = 0;
+
+    /**
+     * @brief Restart the timer.
+     */
+    virtual void restart() = 0;
 };
-
 } // namespace driver

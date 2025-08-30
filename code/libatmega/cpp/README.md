@@ -30,12 +30,3 @@ The library also includes miscellaneous utility functions, type traits etc.
 ## Usage 
 This library must be opened in a Windows environment to build.  
 Copy the library into a Windows path, such as the C drive, before building.
-
-### Setup
-
-Install the AVR toolchain:
-
-```bash
-sudo apt -y update
-sudo apt -y install gcc-avr binutils-avr avr-libc avrdude
-```

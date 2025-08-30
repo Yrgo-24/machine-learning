@@ -4,40 +4,33 @@
  */
 #pragma once
 
-#ifndef F_CPU
-#define F_CPU 16000000UL // Default CPU frequency measured in Hz.
-#endif
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
 #include "type_traits.h"
 
 namespace utils 
 {
-
 /**
  * @brief Block the calling thread for the given time measured in seconds.
  *
- * @param delayTimeS The time to block the thread in seconds.
+ * @param[in] delayTime_s The time to block the thread in seconds.
  */
-void delayS(const uint16_t& delayTimeS) noexcept;
+void delay_s(const uint16_t& delayTime_s) noexcept;
 
 /**
  * @brief Block the calling thread for the given time measured in milliseconds.
  *
- * @param delayTimeMs The time to block the thread in milliseconds.
+ * @param[in] delayTime_ms The time to block the thread in milliseconds.
  */
-void delayMs(const uint16_t& delayTimeMs) noexcept;
+void delay_ms(const uint16_t& delayTime_ms) noexcept;
 
 /**
  * @brief Block the calling thread for the given time measured in microseconds.
  *
- * @param delayTimeUs The time to block the thread in microseconds.
+ * @param[in] delayTime_us The time to block the thread in microseconds.
  */
-void delayUs(const uint16_t& delayTimeUs) noexcept;
+void delay_us(const uint16_t& delayTime_us) noexcept;
 
 /**
  * @brief Structure used for removing references in order to maintain value categories, 
@@ -54,7 +47,7 @@ struct RemoveReference
 /**
  * @brief Maintain the value category of given object.
  *
- * @param object Reference to object whose value category is to be maintained.
+ * @param[in] object Reference to object whose value category is to be maintained.
  *
  * @return Given object with maintained value category.
  */
@@ -64,7 +57,7 @@ constexpr T&& forward(typename RemoveReference<T>::type& object) noexcept;
 /**
  * @brief Maintain the value category of given object.
  *
- * @param object Reference to object whose value category is to be maintained.
+ * @param[in] object Reference to object whose value category is to be maintained.
  *
  * @return Given object with maintained value category.
  */
@@ -74,109 +67,109 @@ constexpr T&& forward(typename RemoveReference<T>::type&& object) noexcept;
 /**
  * @brief Enable interrupts globally.
  */
-inline void globalInterruptEnable() noexcept;
+void globalInterruptEnable() noexcept;
 
 /**
  * @brief Disable interrupts globally.
  */
-inline void globalInterruptDisable() noexcept;
+void globalInterruptDisable() noexcept;
 
 /**
- * @brief Set bit in given register.
+ * @brief Set a bit of the given register.
  *
  * @tparam T The register type. Must be of unsigned type.
  * 
- * @param reg Reference to the register to write to.
- * @param bit The bit to set.
+ * @param[in, out] reg Reference to the register to write to.
+ * @param[in] bit The bit to set.
  */
 template <typename T = uint8_t>
 constexpr void set(volatile T& reg, const uint8_t bit) noexcept;
 
 /**
- * @brief Set bits in given register.
+ * @brief Set bits of the given register.
  *
- * @tparam T    The register type. Must be of unsigned type.
+ * @tparam T The register type. Must be of unsigned type.
  * @tparam Bits Type for additional bits to set.
  *
- * @param reg  Reference to the register to write to.
- * @param bit  The first bit to set.
- * @param bits The other bits to set.
+ * @param[in, out] reg Reference to the register to write to.
+ * @param[in] bit The first bit to set.
+ * @param[in] bits The other bits to set.
  */
 template <typename T = uint8_t, typename... Bits>
 constexpr void set(volatile T& reg, const uint8_t bit, const Bits&&... bits) noexcept;
 
 /**
- * @brief Clear bit in given register.
+ * @brief Clear a bit of the given register.
  *
  * @tparam T The register type. Must be of unsigned type.
  * 
- * @param reg Reference to the register to write to.
- * @param bit The bit to clear.
+ * @param[in, out] reg Reference to the register to write to.
+ * @param[in] bit The bit to clear.
  */
 template <typename T = uint8_t>
 constexpr void clear(volatile T& reg, const uint8_t bit) noexcept;
 
 /**
- * @brief Clear bits in given register.
+ * @brief Clear bits of the given register.
  *
- * @tparam T    The register type. Must be of unsigned type.
+ * @tparam T The register type. Must be of unsigned type.
  * @tparam Bits Type for additional bits to set.
  * 
- * @param reg  Reference to the register to write to.
- * @param bit  The first bit to clear.
- * @param bits The other bits to clear.
+ * @param[in, out] reg Reference to the register to write to.
+ * @param[in] bit The first bit to clear.
+ * @param[in] bits The other bits to clear.
  */
 template <typename T = uint8_t, typename... Bits>
 constexpr void clear(volatile T& reg, const uint8_t bit, const Bits&&... bits) noexcept;
 
 /**
- * @brief Toggle bit in given register.
+ * @brief Toggle a bit of the given register.
  * 
  * @tparam T The register type. Must be of unsigned type.
  * 
- * @param reg Reference to the register to write to.
- * @param bit The bit to toggle.
+ * @param[in, out] reg Reference to the register to write to.
+ * @param[in] bit The bit to toggle.
  */
 template <typename T = uint8_t>
 constexpr void toggle(volatile T& reg, const uint8_t bit) noexcept;
 
 /**
- * @brief Toggle bits in given register.
+ * @brief Toggle bits of the given register.
  *
- * @tparam T    The register type. Must be of unsigned type.
+ * @tparam T The register type. Must be of unsigned type.
  * @tparam Bits Type for additional bits to set.
  * 
- * @param reg  Reference to the register to write to.
- * @param bit  The first bit to toggle.
- * @param bits The other bits to toggle.
+ * @param[in, out] reg Reference to the register to write to.
+ * @param[in] bit The first bit to toggle.
+ * @param[in] bits The other bits to toggle.
  */
 template <typename T = uint8_t, typename... Bits>
 constexpr void toggle(volatile T& reg, const uint8_t bit, const Bits&&... bits) noexcept;
 
 /**
- * @brief Read bit in given register.
+ * @brief Read a bit of the given register.
  * 
  * @tparam T The register type. Must be of unsigned type.
  *
- * @param reg Reference to the register to read from.
- * @param bit The given bit to read.
+ * @param[in, out] reg Reference to the register to read from.
+ * @param[in] bit The given bit to read.
  *
- * @return True if the bit is set, otherwise false.
+ * @return True if the bit is set, false otherwise.
  */
 template <typename T = uint8_t>
 constexpr bool read(const volatile T& reg, const uint8_t bit) noexcept;
 
 /**
- * @brief Read bits in given register.
+ * @brief Read bits of the given register.
  *
- * @tparam T    The register type. Must be of unsigned type.
+ * @tparam T The register type. Must be of unsigned type.
  * @tparam Bits Type for additional bits to set.
  * 
- * @param reg  Reference to the register to read from.
- * @param bit  The first bit to read.
- * @param bits The other bits to read.
+ * @param[in, out] reg Reference to the register to read from.
+ * @param[in] bit The first bit to read.
+ * @param[in] bits The other bits to read.
  *
- * @return True if at least one of bits is set, otherwise false.
+ * @return True if at least one of bits is set, false otherwise.
  */
 template <typename T = uint8_t, typename... Bits>
 constexpr bool read(const volatile T& reg, const uint8_t bit, const Bits&&... bits) noexcept;
@@ -188,8 +181,8 @@ constexpr bool read(const volatile T& reg, const uint8_t bit, const Bits&&... bi
  * @tparam T2 The exponent type. Must be arithmetic.
  * @tparam T3 The power type. Must be arithmetic.
  * 
- * @param base     The base to use for the calculation.
- * @param exponent The exponent to use for the calculation.
+ * @param[in] base The base to use for the calculation.
+ * @param[in] exponent The exponent to use for the calculation.
  *
  * @return The power as a function of given base and exponent.
  */
@@ -202,7 +195,7 @@ T3 power(const T1 base, const T2 exponent) noexcept;
  * @tparam T1 The type to round to. Must be integral.
  * @tparam T2 The type to round from. Must be arithmetic.
  * 
- * @param number The number to round.
+ * @param[in] number The number to round.
  *
  * @return The corresponding rounded number.
  */
@@ -210,12 +203,26 @@ template <typename T1 = int32_t, typename T2 = double>
 constexpr T1 round(const T2 value) noexcept;
 
 /**
+ * @brief Check if the given number is within the given range [min, max].
+ * 
+ * @tparam T The numeric type. Must be of arithmetic type.
+ * 
+ * @param[in] number The number to check.
+ * @param[in] min Minimum value of the range to check.
+ * @param[in] max Maximum value of the range to check.
+ * 
+ * @return True if the given number is within the given range, false otherwise.
+ */
+template <typename T>
+constexpr bool inRange(const T number, const T min, const T max) noexcept;
+
+/**
  * @brief Allocate a new object on the heap.
  *
- * @tparam T    The field type.
+ * @tparam T The field type.
  * @tparam Args The types of arguments to pass to the constructor of T.
  * 
- * @param args The arguments to pass to the constructor of T.
+ * @param[in] args The arguments to pass to the constructor of T.
  * 
  * @return A pointer to the new object.
  * 
@@ -229,7 +236,7 @@ inline T* newObject(Args&&... args) noexcept;
  *
  * @tparam T The field type.
  * 
- * @param size The size of field in number of elements it can hold (default = 1).
+ * @param[in] size The size of field in number of elements it can hold (default = 1).
  *
  * @return A pointer to the new object.
  * 
@@ -243,11 +250,11 @@ inline T* newMemory(const size_t size = 1U) noexcept;
  *
  * @tparam T The block type.
  * 
- * @param block   The block to resize.
- * @param newSize The new size of allocated block, i.e. the number of
- *                elements it can hold after reallocation.
+ * @param[in] block The block to resize.
+ * @param[in] newSize The new size of allocated block, i.e. the number of elements it can hold 
+ *                    after reallocation.
  *
- * @return A pointer to the resized block at success, else a null pointer.
+ * @return A pointer to the resized block at success, else a nullptr.
  */
 template <typename T>
 inline T* reallocMemory(T* block, const size_t newSize) noexcept;
@@ -259,18 +266,19 @@ inline T* reallocMemory(T* block, const size_t newSize) noexcept;
  * 
  * @tparam T The block type.
  *
- * @param block Reference to the block to delete.
+ * @param[in] block Reference to the block to delete.
  */
 template <typename T>
 inline void deleteMemory(T* &block) noexcept;
 
 /**
- * @brief Move memory from given source to a copy. The copy will gain
- *        ownership of memory and the source will be emptied.
+ * @brief Move memory from given source to a copy. 
+ * 
+ * The copy will gain ownership of memory and the source instance will be emptied.
  *
  * @tparam T The type of source and the copy.
  * 
- * @param source Reference to the source whose memory is moved.
+ * @param[in] source Reference to the source whose memory is moved.
  *
  * @return The copy of source.
  */
@@ -278,19 +286,5 @@ template <typename T>
 inline T move(T&& source) noexcept;
 
 } // namespace utils
-
-/**
- * @brief Overload of operator delete to satisfy the linker when using interfaces.
- */
-void operator delete(void*, unsigned int) noexcept;
-
-/**
- * @brief Definition of initialization error function to satisfy the linker when using interfaces.
- */
-extern "C" void __cxa_pure_virtual();
-
-extern "C" void __cxa_guard_acquire();
-
-extern "C" void __cxa_guard_release();
 
 #include "impl/utils_impl.h"

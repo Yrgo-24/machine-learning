@@ -1,59 +1,34 @@
 /**
- * @brief Driver for the ATmega328P ADC (A/D converter).
+ * @brief ADC driver for the ATmega328P ADC (A/D converter).
  */
 #pragma once
 
+#include <stdint.h>
+
 #include "adc_interface.h"
-#include "utils.h"
 
 namespace driver 
 {
 namespace atmega328p
 {
-
 /**
- * @brief Class for ATmega328P ADC driver.
+ * @brief ADC driver for the ATmega328P ADC (A/D converter).
  * 
- *        This class is non-copyable.
+ *        Use the singleton design pattern to ensure only one ADC instance exists,
+ *        reflecting the hardware limitation of a single ADC on the MCU.
  */
-class Adc : public AdcInterface
+class Adc final : public AdcInterface
 {
 public:
-
     struct Pin;  // Pin aliases for analog pins.
     struct Port; // Port aliases for analog pins.
 
     /**
-     * @brief Create new ADC.
+     * @brief Get the singleton ADC instance.
      * 
-     * @param enable Indicate whether to enable the ADC (default = true).
+     * @return Reference to the singleton ADC instance.
      */
-    explicit Adc(const bool enable = true) noexcept;
-
-    /**
-     * @brief Delete ADC.
-     */
-    ~Adc() noexcept override = default;
-
-    /**
-     * @brief Move memory from another ADC.
-     *
-     *        The other ADC is cleared once the move operation is completed.
-     *
-     * @param other Reference to ADC to move memory from.
-     */
-    Adc(Adc&& other) noexcept;
-
-    /**
-     * @brief Move content from another ADC.
-     * 
-     *        The other ADC is cleared once the move operation is completed.
-     *
-     * @param other Reference to ADC holding the data to move. 
-     * 
-     * @return Reference to this ADC.
-     */
-    Adc& operator=(Adc&& other) noexcept;
+    static AdcInterface& getInstance() noexcept;
 
     /**
      * @brief Get the resolution of the ADC.
@@ -79,7 +54,7 @@ public:
     /**
      * @brief Read input from given analog pin.
      * 
-     * @param analogPin The analog pin from which to read.
+     * @param[in] analogPin The analog pin from which to read.
      * 
      * @return The digital value corresponding to the input of the specified analog pin.
      */
@@ -88,7 +63,7 @@ public:
     /**
      * @brief Calculate duty cycle out of input from given analog pin.
      * 
-     * @param analogPin The analog pin from which to read.
+     * @param[in] analogPin The analog pin from which to read.
      * 
      * @return The duty cycle as a floating point value between 0.0 - 1.0.
      */
@@ -97,45 +72,48 @@ public:
     /**
      * @brief Read input voltage from given analog pin.
      * 
-     * @param analogPin The analog pin from which to read.
+     * @param[in] analogPin The analog pin from which to read.
      * 
      * @return The input voltage in Volts.
      */
     double inputVoltage(const uint8_t analogPin) const noexcept override;
-  
+
     /**
      * @brief Check whether the ADC is initialized.
      * 
-     * @return True if the ADC is initialized, otherwise false.
+     * @return True if the ADC is initialized, false otherwise.
      */
     bool isInitialized() const noexcept override;
 
     /**
      * @brief Indicate whether the ADC is enabled.
      * 
-     * @return True if the ADC is enabled, otherwise false.
+     * @return True if the ADC is enabled, false otherwise.
      */
     bool isEnabled() const noexcept override;
 
     /**
      * @brief Set enablement of ADC.
      * 
-     * @param enable Indicate whether to enable the ADC.
+     * @param[in] enable Indicate whether to enable the ADC.
      */
     void setEnabled(const bool enable) noexcept override;
 
     Adc(const Adc&)            = delete; // No copy constructor.
+    Adc(Adc&&)                 = delete; // No move constructor.
     Adc& operator=(const Adc&) = delete; // No copy assignment.
+    Adc& operator=(Adc&&)      = delete; // No move assignment.
 
 private:
+    Adc() noexcept;
+    ~Adc() noexcept override = default;
 
-    void init() const noexcept;
-
-    bool myEnabled; // Indicate whether the ADC is enabled.
+    /** Indicate whether the ADC is enabled. */
+    bool myEnabled;
 };
 
 /**
- * @brief Struct containing pin names for analog pins.
+ * @brief Structure of pin names for analog pins.
  */
 struct Adc::Pin 
 {
@@ -148,10 +126,10 @@ struct Adc::Pin
 };
 
 /**
- * @brief Struct containing port names for analog pins.
+ * @brief Structure of port names for analog pins.
  */
 struct Adc::Port
- {
+{
     static constexpr uint8_t C0{14U}; // PORTC0 = pin 14.
     static constexpr uint8_t C1{15U}; // PORTC1 = pin 15.
     static constexpr uint8_t C2{16U}; // PORTC2 = pin 16.
@@ -159,6 +137,5 @@ struct Adc::Port
     static constexpr uint8_t C4{18U}; // PORTC4 = pin 18.
     static constexpr uint8_t C5{19U}; // PORTC5 = pin 10.
 };
-
 } // namespace atmega328p
 } // namespace driver

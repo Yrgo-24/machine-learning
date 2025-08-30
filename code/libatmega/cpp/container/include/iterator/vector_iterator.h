@@ -26,7 +26,7 @@ public:
     /**
      * @brief Create iterator pointing at given data.
      *
-     * @param data Reference to data the iterator is set to point at.
+     * @param[in] data Reference to data the iterator is set to point at.
      */
     Iterator(T& data) noexcept
         : myData{&data} {}
@@ -34,7 +34,7 @@ public:
     /**
      * @brief Create iterator pointing at given data.
      *
-     * @param data Pointer to data the iterator is set to point at.
+     * @param[in] data Pointer to data the iterator is set to point at.
      */
     Iterator(T* data) noexcept
         : myData{data} {}
@@ -47,7 +47,7 @@ public:
     /**
      * @brief Create copy of another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      */
     Iterator(const Iterator& other) noexcept
         : myData{other.myData} {}
@@ -57,7 +57,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      */
     Iterator(Iterator&& other) noexcept
         : myData{other.myData} { other.myData = nullptr; }
@@ -65,7 +65,7 @@ public:
     /**
      * @brief Copy another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      * 
      * @return Reference to this iterator.
      */
@@ -80,7 +80,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      * 
      * @return Reference to this iterator.
      */
@@ -143,7 +143,7 @@ public:
     /**
      * @brief Increment the iterator given number of times.
      *
-     * @param incrementCount The number of times the iterator will be incremented.
+     * @param[in] incrementCount The number of times the iterator will be incremented.
      */
     void operator+=(const size_t incrementCount) noexcept
     {
@@ -153,7 +153,7 @@ public:
     /**
      * @brief Decrement the iterator given number of times.
      *
-     * @param decrementCount The number of times the iterator will be decremented.
+     * @param[in] decrementCount The number of times the iterator will be decremented.
      */
     void operator-=(const size_t decrementCount) noexcept
     {
@@ -163,18 +163,18 @@ public:
     /**
      * @brief Check if the iterator and referenced other iterator point at the same address.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at the same address, otherwise false.
+     * @return True if the iterators point at the same address, false otherwise.
      */
     bool operator==(const Iterator& other) const noexcept { return myData == other.myData; }
 
     /**
      * @brief Check if the iterator and referenced other iterator point at different addresses.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at the different addresses, otherwise false.
+     * @return True if the iterators point at the different addresses, false otherwise.
      */
     bool operator!=(const Iterator& other) const noexcept { return myData != other.myData; }
 
@@ -182,10 +182,10 @@ public:
      * @brief Check if the iterator points at an address that's higher than
      *        the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's higher than the address
-     *         pointed to by referenced other iterator, otherwise false.
+     *         pointed to by referenced other iterator, false otherwise.
      */
     bool operator>(const Iterator& other) const noexcept { return myData > other.myData; }
 
@@ -193,10 +193,10 @@ public:
      * @brief Check if the iterator points at an address that's lower than
      *        the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's lower than the address
-     *         pointed to by referenced other iterator, otherwise false.
+     *         pointed to by referenced other iterator, false otherwise.
      */
     bool operator<(const Iterator& other) const noexcept { return myData < other.myData; }
 
@@ -204,10 +204,10 @@ public:
      * @brief Check if the iterator points at an address that's higher or equal
      *        to the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's higher or equal to the
-     *         address pointed to by referenced other iterator, otherwise false.
+     *         address pointed to by referenced other iterator, false otherwise.
      */
     bool operator>=(const Iterator& other) const noexcept { return myData >= other.myData; }
 
@@ -215,10 +215,10 @@ public:
      * @brief Check if the iterator points at an address that's lower or equal
      *        to the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's lower or equal to the
-     *         address pointed to by referenced other iterator, otherwise false.
+     *         address pointed to by referenced other iterator, false otherwise.
      */
     bool operator<=(const Iterator& other) const noexcept { return myData <= other.myData; }
 
@@ -258,7 +258,7 @@ public:
     /**
      * @brief Create iterator pointing at given data.
      *
-     * @param data Reference to data the iterator is set to point at.
+     * @param[in] data Reference to data the iterator is set to point at.
      */
     ConstIterator(const T& data) noexcept
         : myData{&data} {}
@@ -266,7 +266,7 @@ public:
     /**
      * @brief Create iterator pointing at given data.
      *
-     * @param data Pointer to data the iterator is set to point at.
+     * @param[in] data Pointer to data the iterator is set to point at.
      */
     ConstIterator(const T* data) noexcept
         : myData{data} {}
@@ -279,7 +279,7 @@ public:
     /**
      * @brief Create copy of another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      */
     ConstIterator(const ConstIterator& other) noexcept
         : myData{other.myData} {}
@@ -289,7 +289,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      */
     ConstIterator(ConstIterator&& other) noexcept
         : myData{other.myData} { other.myData = nullptr; }
@@ -297,7 +297,7 @@ public:
     /**
      * @brief Copy another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      * 
      * @return Reference to this iterator.
      */
@@ -312,7 +312,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      * 
      * @return Reference to this iterator.
      */
@@ -375,7 +375,7 @@ public:
     /**
      * @brief Increment the iterator given number of times.
      *
-     * @param incrementCount The number of times the iterator will be incremented.
+     * @param[in] incrementCount The number of times the iterator will be incremented.
      */
     void operator+=(const size_t incrementCount) noexcept
     {
@@ -385,7 +385,7 @@ public:
     /**
      * @brief Decrement the iterator given number of times.
      *
-     * @param decrementCount The number of times the iterator will be decremented.
+     * @param[in] decrementCount The number of times the iterator will be decremented.
      */
     void operator-=(const size_t decrementCount) noexcept
     {
@@ -395,18 +395,18 @@ public:
     /**
      * @brief Check if the iterator and referenced other iterator point at the same address.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at the same address, otherwise false.
+     * @return True if the iterators point at the same address, false otherwise.
      */
     bool operator==(const ConstIterator& other) const noexcept { return myData == other.myData; }
 
     /**
      * @brief Check if the iterator and referenced other iterator point at different addresses.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at the different addresses, otherwise false.
+     * @return True if the iterators point at the different addresses, false otherwise.
      */
     bool operator!=(const ConstIterator& other) const noexcept { return myData != other.myData; }
 
@@ -414,10 +414,10 @@ public:
      * @brief Check if the iterator points at an address that's higher than
      *        the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's higher than the address
-     *         pointed to by referenced other iterator, otherwise false.
+     *         pointed to by referenced other iterator, false otherwise.
      */
     bool operator>(const ConstIterator& other) const noexcept { return myData > other.myData; }
 
@@ -425,10 +425,10 @@ public:
      * @brief Check if the iterator points at an address that's lower than
      *        the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's lower than the address
-     *         pointed to by referenced other iterator, otherwise false.
+     *         pointed to by referenced other iterator, false otherwise.
      */
     bool operator<(const ConstIterator& other) const noexcept { return myData < other.myData; }
 
@@ -436,10 +436,10 @@ public:
      * @brief Check if the iterator points at an address that's higher or equal
      *        to the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's higher or equal to the
-     *         address pointed to by referenced other iterator, otherwise false.
+     *         address pointed to by referenced other iterator, false otherwise.
      */
     bool operator>=(const ConstIterator& other) const noexcept { return myData >= other.myData; }
 
@@ -447,10 +447,10 @@ public:
      * @brief Check if the iterator points at an address that's lower or equal
      *        to the address pointed to by referenced other iterator.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
      * @return True if iterator points at an address that's lower or equal to the
-     *         address pointed to by referenced other iterator, otherwise false.
+     *         address pointed to by referenced other iterator, false otherwise.
      */
     bool operator<=(const ConstIterator& other) const noexcept { return myData <= other.myData; }
 

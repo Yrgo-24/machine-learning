@@ -213,7 +213,7 @@ struct is_pointer
 /**
  * @brief Specialization for all pointer types.
  * 
- * @param T The pointer type.
+ * @param[in] T The pointer type.
  */
 template <typename T>
 struct is_pointer<T*>
@@ -236,7 +236,7 @@ struct is_reference
 /**
  * @brief Specialization for all reference types.
  * 
- * @param T The reference type.
+ * @param[in] T The reference type.
  */
 template <typename T>
 struct is_reference<T&>

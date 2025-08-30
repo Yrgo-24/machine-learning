@@ -1,6 +1,8 @@
 /**
  * @brief Implementation details of hardware timer driver.
  */
+#include <avr/interrupt.h>
+
 #include "array.h"
 #include "callback_array.h"
 #include "timer.h" 
@@ -71,7 +73,7 @@ CallbackArray<TimerParam::circuitCount> TimerParam::callbacks{};
 // -----------------------------------------------------------------------------
 constexpr uint32_t maxCount(const uint32_t elapseTimeMs) noexcept
 {
-	return elapseTimeMs > 0U ? 
+	return 0U < elapseTimeMs ? 
         utils::round<uint32_t>(elapseTimeMs / TimerParam::interruptIntervalMs) : 0U;
 }
 
@@ -85,13 +87,12 @@ void invokeCallback(const uint8_t timerIndex) noexcept
     {
         timer->increment();
 
-        if (timer->hasElapsed()) 
+        if (timer->hasTimedOut()) 
 		{ 
 			TimerParam::callbacks.invoke(timerIndex); 
 		}
     }
 }
-
 } // namespace
 
 // -----------------------------------------------------------------------------
@@ -115,40 +116,13 @@ Timer::~Timer() noexcept
 }
 
 // -----------------------------------------------------------------------------
-Timer::Timer(Timer&& other) noexcept
-    : myHardware{other.myHardware}
-    , myMaxCount{other.myMaxCount}
-    , myEnabled{other.myEnabled}
-{
-    other.myHardware    = nullptr;
-    other.myMaxCount    = 0U;
-    other.myEnabled     = false;
-}
-
-// -----------------------------------------------------------------------------
-Timer& Timer::operator=(Timer&& other) noexcept
-{
-    if (&other != this)
-	{
-		myHardware    = other.myHardware;
-		myMaxCount    = other.myMaxCount;
-		myEnabled     = other.myEnabled;
-
-		other.myHardware    = nullptr;
-		other.myMaxCount    = 0U;
-		other.myEnabled     = false;
-	}
-    return *this;
-}
-
-// -----------------------------------------------------------------------------
-bool Timer::isInitialized() const noexcept { return myHardware != nullptr; }
+bool Timer::isInitialized() const noexcept { return nullptr != myHardware; }
 
 // -----------------------------------------------------------------------------
 bool Timer::isEnabled() const noexcept { return myEnabled; }
 
 // -----------------------------------------------------------------------------
-bool Timer::hasElapsed() noexcept
+bool Timer::hasTimedOut() noexcept
 {
     if (!myEnabled || (myHardware->counter < myMaxCount)) { return false; } 
 	else 
@@ -159,22 +133,22 @@ bool Timer::hasElapsed() noexcept
 }
 
 // -----------------------------------------------------------------------------
-uint32_t Timer::elapseTimeMs() const noexcept
+uint32_t Timer::timeout_ms() const noexcept
 {
 	return utils::round<uint32_t>(myMaxCount * TimerParam::interruptIntervalMs);
 }
 
 // -----------------------------------------------------------------------------
-void Timer::setElapseTimeMs(const uint32_t elapseTimeMs) noexcept
+void Timer::setTimeout_ms(const uint32_t timeout_ms) noexcept
 {
-    if (elapseTimeMs == 0U) { stop(); }
-    myMaxCount = maxCount(elapseTimeMs);
+    if (0U == timeout_ms) { stop(); }
+    myMaxCount = maxCount(timeout_ms);
 }
 
 // -----------------------------------------------------------------------------
 void Timer::start() noexcept
 { 
-	if (myMaxCount == 0U) { return; }
+	if (0U == myMaxCount) { return; }
     utils::globalInterruptEnable();
 	utils::set(*(myHardware->maskReg), myHardware->maskBit);
 	myEnabled = true;
@@ -224,9 +198,9 @@ bool Timer::increment() noexcept
 // -----------------------------------------------------------------------------
 Timer::Hardware* Timer::Hardware::reserve() noexcept
 {
-    for (uint8_t i = 0U; i < TimerParam::circuitCount; ++i)
+    for (uint8_t i{}; i < TimerParam::circuitCount; ++i)
 	{
-        if (TimerParam::timers[i] == nullptr) { return init(i); }
+        if (nullptr == TimerParam::timers[i]) { return init(i); }
 	}
 	return nullptr;
 }
@@ -244,7 +218,7 @@ void Timer::Hardware::release(Timer::Hardware* hardware) noexcept
 			break;
 		case TimerIndex::timer1:
 		    TCCR1B = 0U;
-		    OCR1A  = 0U;
+		    OCR1A = 0U;
 			break;
 		case TimerIndex::timer2:
 		    TCCR2B = 0U;
@@ -283,7 +257,6 @@ Timer::Hardware* Timer::Hardware::init(const uint8_t timerIndex) noexcept
 		    utils::deleteMemory(hardware);
 			return nullptr;
 	}
-
     hardware->counter = 0U;
 	hardware->index   = timerIndex;
 	return hardware;

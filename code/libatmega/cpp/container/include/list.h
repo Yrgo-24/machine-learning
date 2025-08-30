@@ -27,8 +27,8 @@ public:
     /**
      * @brief Create list of given size initialized with given start value.
      *
-     * @param size       Initial size of list.
-     * @param startValue Initial value for each element (default = 0).
+     * @param[in] size       Initial size of list.
+     * @param[in] startValue Initial value for each element (default = 0).
      */
      explicit List(const size_t size, const T& startValue = static_cast<T>(0)) noexcept;
 
@@ -37,7 +37,7 @@ public:
      *
      * @tparam Values Parameter pack containing values.
      * 
-     * @param values The values to add to the list.
+     * @param[in] values The values to add to the list.
      */
     template <typename... Values> 
     List(const Values&&... values) noexcept;
@@ -50,7 +50,7 @@ public:
     /**
      * @brief Create list as a copy of another list.
      *
-     * @param other Reference to other list to copy from.
+     * @param[in] other Reference to other list to copy from.
      */
     List(const List<T>& other) noexcept;
 
@@ -59,7 +59,7 @@ public:
      * 
      *        The other list is emptied once the move operation is completed.
      *
-     * @param other Reference to other list to move memory from.
+     * @param[in] other Reference to other list to move memory from.
      */
     List(List<T>&& other) noexcept;
 
@@ -68,7 +68,7 @@ public:
      * 
      *        Previous values are cleared before copying.
      *
-     * @param other Reference to list holding the data to copy.
+     * @param[in] other Reference to list holding the data to copy.
      * 
      * @return Reference to this list.
      */
@@ -81,7 +81,7 @@ public:
      * 
      *        The other list is emptied once the move operation is completed.
      *
-     * @param other Reference to list holding the data to move. 
+     * @param[in] other Reference to list holding the data to move. 
      * 
      * @return Reference to this list.
      */
@@ -90,7 +90,7 @@ public:
     /**
      * @brief Add values from another list.
      *
-     * @param other Reference to list holding the values to add.
+     * @param[in] other Reference to list holding the values to add.
      * 
      * @return Reference to this list.
      */
@@ -101,7 +101,7 @@ public:
      *
      * @tparam ValueCount The number of values to add.
      * 
-     * @param values Reference to the values to add.
+     * @param[in] values Reference to the values to add.
      * 
      * @return Reference to this list.
      */
@@ -111,7 +111,7 @@ public:
     /**
      * @brief Get reference to the value at given position in the list.
      *
-     * @param iterator Reference to iterator pointing at the value to read.
+     * @param[in] iterator Reference to iterator pointing at the value to read.
      * 
      * @return A reference to the element at given position.
      */
@@ -120,7 +120,7 @@ public:
     /**
      * @brief Get reference to the element at given index in the list.
      *
-     * @param iterator Reference to iterator pointing at the value to read.
+     * @param[in] iterator Reference to iterator pointing at the value to read.
      * 
      * @return A reference to the element at given position.
      */
@@ -141,7 +141,7 @@ public:
     /**
      * @brief Check if the list is empty.
      *
-     * @return True if the list is empty, otherwise false.
+     * @return True if the list is empty, false otherwise.
      */
     bool empty() const noexcept;
 
@@ -204,38 +204,38 @@ public:
     /**
      * @brief Resize the list to given new size.
      *
-     * @param newSize    The new size of list.
-     * @param startValue Initial value for each new element (default = 0).
+     * @param[in] newSize    The new size of list.
+     * @param[in] startValue Initial value for each new element (default = 0).
      * 
-     * @return True if the list was resized, otherwise false.
+     * @return True if the list was resized, false otherwise.
      */
     bool resize(const size_t newSize, const T& startValue = static_cast<T>(0)) noexcept;
 
     /**
      * @brief Insert value at the front of list.
      *
-     * @param value Reference to the value to add.
+     * @param[in] value Reference to the value to add.
      * 
-     * @return True if the value was added, otherwise false.
+     * @return True if the value was added, false otherwise.
      */
     bool pushFront(const T& value) noexcept;
 
     /**
      * @brief Insert value at the back of list.
      *
-     * @param value Reference to the value to add.
+     * @param[in] value Reference to the value to add.
      * 
-     * @return True if the value was added, otherwise false.
+     * @return True if the value was added, false otherwise.
      */
     bool pushBack(const T& value) noexcept;
 
     /**
      * @brief Insert value at given position in the list.
      *
-     * @param iterator Reference to iterator pointing at the location to place the new value.
-     * @param value    Reference to the value to add.
+     * @param[in] iterator Reference to iterator pointing at the location to place the new value.
+     * @param[in] value    Reference to the value to add.
      * 
-     * @return True if the value was added, otherwise false.
+     * @return True if the value was added, false otherwise.
      */
     bool insert(Iterator& iterator, const T& value) noexcept;
 
@@ -252,9 +252,9 @@ public:
     /**
      * @brief Remove value at given position in the list.
      *
-     * @param iterator Reference to iterator pointing at the value to remove.
+     * @param[in] iterator Reference to iterator pointing at the value to remove.
      *
-     * @return True if the value was removed, otherwise false.
+     * @return True if the value was removed, false otherwise.
      */
     bool remove(Iterator& iterator) noexcept;
 

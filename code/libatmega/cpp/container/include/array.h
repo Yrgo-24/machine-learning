@@ -33,7 +33,7 @@ public:
      *
      * @tparam Values Type of the given values.
      * 
-     * @param values Reference to given values.
+     * @param[in] values Reference to given values.
      */
     template <typename... Values>
     explicit Array(const Values&&... values) noexcept;
@@ -41,14 +41,14 @@ public:
     /**
      * @brief Create array containing given values.
      *
-     * @param values Reference to given values.
+     * @param[in] values Reference to given values.
      */
     explicit Array(const T (&values)[Size]) noexcept;
 
     /**
      * @brief Create array as a copy of another array.
      *
-     * @param other Reference to other array to copy from.
+     * @param[in] other Reference to other array to copy from.
      */
     Array(const Array<T, Size>& other) noexcept;
 
@@ -57,7 +57,7 @@ public:
      * 
      *        The other array is emptied once the move operation is completed.
      *
-     * @param other Reference to other array to move memory from.
+     * @param[in] other Reference to other array to move memory from.
      */
     Array(Array<T, Size>&& other) noexcept;
 
@@ -71,7 +71,7 @@ public:
      *
      * @tparam ValueCount The number of values in the other array.
      * 
-     * @param other Reference to array holding the values to copy.
+     * @param[in] other Reference to array holding the values to copy.
      * 
      * @return Reference to this array.    
      */
@@ -83,7 +83,7 @@ public:
      * 
      *        The other array is emptied once the move operation is completed.
      * 
-     * @param other Reference to array holding the values to move.
+     * @param[in] other Reference to array holding the values to move.
      * 
      * @return Reference to this array.    
      */
@@ -94,7 +94,7 @@ public:
      *
      * @tparam ValueCount The number of values to copy.
      * 
-     * @param values Reference to the values to copy.
+     * @param[in] values Reference to the values to copy.
      * 
      * @return Reference to this array.
      */
@@ -106,7 +106,7 @@ public:
      *
      * @tparam ValueCount The number of values in the other array.
      * 
-     * @param other Reference to array containing the values to add.
+     * @param[in] other Reference to array containing the values to add.
      * 
      * @return Reference to this array.     
      */
@@ -118,7 +118,7 @@ public:
      *
      * @tparam ValueCount The number of values to add.
      * 
-     * @param values Reference to the values to add.
+     * @param[in] values Reference to the values to add.
      * 
      * @return Reference to this array.    
      */
@@ -128,7 +128,7 @@ public:
     /**
      * @brief Get element at given index in the array.
      *
-     * @param index Index of requested element.
+     * @param[in] index Index of requested element.
      * 
      * @return Reference to the element at given index.
      */
@@ -137,7 +137,7 @@ public:
     /**
      * @brief Get element at given index in the array.
      *
-     * @param index Index of requested element.
+     * @param[in] index Index of requested element.
      * 
      * @return Reference to the element at given index.
      */

@@ -1,23 +1,33 @@
 /**
- * @brief Implementation of system with generic hardware.
+ * @brief Generic system implementation for an MCU with configurable hardware devices.
  */
 #pragma once
 
 namespace driver
 {
+/** ADC (A/D converter) interface. */
 class AdcInterface;
+
+/** EEPROM (Electrically Erasable Programmable ROM) stream interface. */
 class EepromInterface;
+
+/** GPIO interface. */
 class GpioInterface;
+
+/** Serial transmission interface. */
 class SerialInterface;
+
+/** Timer interface. */
 class TimerInterface;
+
+/** Watchdog timer interface. */
 class WatchdogInterface;
 } // namespace driver
 
 namespace target
 {
-
 /**
- * @brief Generic system implementation.
+ * @brief Generic system for an MCU with configurable hardware devices.
  * 
  *        The following devices are used:
  * 
@@ -33,30 +43,25 @@ namespace target
  * 
  *        This class is non-copyable and non-movable.
  */
-class System
+class System final
 {
 public:
-
     /**
-     * @brief Create new system.
+     * @brief Create a new system.
      *     
-     * @param led           Reference to LED.
-     * @param button        Reference to button used to toggle the toggle timer.
-     * @param debounceTimer Reference to timer used to mitigate effects of contact bounces.
-     * @param toggleTimer   Reference to timer used to toggle the LED.
-     * @param serial        Reference to serial device used to print status messages.
-     * @param adc           Reference to ADC.
-     * @param watchdog      Reference to watchdog timer.
-     * @param eeprom        Reference to EEPROM stream.
+     * @param[in] led The LED to toggle.
+     * @param[in] button Button used to toggle the toggle timer.
+     * @param[in] debounceTimer Timer used to mitigate effects of contact bounces.
+     * @param[in] toggleTimer Timer used to toggle the LED.
+     * @param[in] serial Serial device used to print status messages.
+     * @param[in] watchdog Watchdog timer that resets the program if it becomes unresponsive.
+     * @param[in] eeprom EEPROM stream to write the status of the LED to EEPROM.
+     * @param[in] adc ADC (currently unused).
      */
-    System(driver::GpioInterface& led,
-           driver::GpioInterface& button,
-           driver::TimerInterface& debounceTimer,
-           driver::TimerInterface& toggleTimer,
-           driver::SerialInterface& serial,
-           driver::AdcInterface& adc,
-           driver::WatchdogInterface& watchdog,
-           driver::EepromInterface& eeprom) noexcept;
+    explicit System(driver::GpioInterface& led, driver::GpioInterface& button, 
+                    driver::TimerInterface& debounceTimer, driver::TimerInterface& toggleTimer,
+                    driver::SerialInterface& serial, driver::WatchdogInterface& watchdog, 
+                    driver::EepromInterface& eeprom, driver::AdcInterface& adc) noexcept;
 
     /**
      * @brief Delete system.
@@ -66,7 +71,7 @@ public:
     /**
      * @brief Enable serial transmission.
      * 
-     * @param enable Indicate whether to enable serial transmission.
+     * @param[in] enable Indicate whether to enable serial transmission.
      */
     void enableSerialTransmission(const bool enable) noexcept;
 
@@ -94,31 +99,45 @@ public:
      */
     void handleToggleTimerInterrupt() noexcept;
 
-    System(const System&)            = delete; // No copy constructor.
-    System(System&&)                 = delete; // No move constructor.
-    System& operator=(const System&) = delete; // No copy assignment.
-    System& operator=(System&&)      = delete; // No move assignment.
-
     /**
      * @brief Run the system as long as voltage is supplied.                                                               
      */
     void run() noexcept;
 
-private:
+    System()                         = delete; // No default constructor.
+    System(const System&)            = delete; // No copy constructor.
+    System(System&&)                 = delete; // No move constructor.
+    System& operator=(const System&) = delete; // No copy assignment.
+    System& operator=(System&&)      = delete; // No move assignment.
 
+private:
     void handleButtonPressed() noexcept;
     void checkLedStateInEeprom() noexcept;
     void writeLedStateToEeprom() noexcept;
     bool readLedStateFromEeprom() const noexcept;
 
-    driver::GpioInterface& myLed;            // Reference to LED.
-    driver::GpioInterface& myButton;         // Reference to button for toggling the toggle timer.
-    driver::TimerInterface& myDebounceTimer; // Reference to debounce timer.
-    driver::TimerInterface& myToggleTimer;   // Reference to toggle timer for toggling the LED.
-    driver::SerialInterface& mySerial;       // Reference to serial device used to print messages.
-    driver::AdcInterface& myAdc;             // Reference to ADC.
-    driver::WatchdogInterface& myWatchdog;   // Reference to watchdog timer.
-    driver::EepromInterface& myEeprom;       // Reference to EEPROM stream.
-};
+    /** Reference to the LED to toggle. */
+    driver::GpioInterface& myLed;
 
+    /** Button used to toggle the toggle timer. */
+    driver::GpioInterface& myButton;
+
+    /** Debounce timer used to mitigate effects of contact bounces. */
+    driver::TimerInterface& myDebounceTimer;
+
+    /** Timer used to toggle the LED. */
+    driver::TimerInterface& myToggleTimer;
+
+    /** Serial device used to print status messages. */
+    driver::SerialInterface& mySerial;
+
+    /** Watchdog timer that resets the program if it becomes unresponsive. */
+    driver::WatchdogInterface& myWatchdog;
+
+    /** EEPROM stream to write the status of the LED to EEPROM. */
+    driver::EepromInterface& myEeprom;
+
+    /** A/D converter (currently unused). */
+    driver::AdcInterface& myAdc;
+};
 } // namespace target

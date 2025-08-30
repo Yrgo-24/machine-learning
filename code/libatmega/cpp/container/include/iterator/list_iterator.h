@@ -26,7 +26,7 @@ public:
      /**
      * @brief Create iterator pointing at given node.
      *
-     * @param node Reference to node the iterator is to point at.
+     * @param[in] node Reference to node the iterator is to point at.
      */
     Iterator(Node& node) noexcept
         : myNode{&node} {}
@@ -34,7 +34,7 @@ public:
     /**
      * @brief Create iterator pointing at given node.
      *
-     * @param node Pointer to node the iterator is to point at.
+     * @param[in] node Pointer to node the iterator is to point at.
      */
     Iterator(Node* node) noexcept
         : myNode{node} {}
@@ -47,7 +47,7 @@ public:
     /**
      * @brief Create copy of another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      */
     Iterator(const Iterator& other) noexcept
         : myNode{other.myNode} {}
@@ -57,7 +57,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      */
     Iterator(Iterator&& other) noexcept
         : myNode{other.myNode} { other.myNode = nullptr; }
@@ -65,7 +65,7 @@ public:
     /**
      * @brief Copy another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      * 
      * @return Reference to this iterator.
      */
@@ -80,7 +80,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      * 
      * @return Reference to this iterator.
      */
@@ -143,7 +143,7 @@ public:
     /**
      * @brief Increment the iterator given number of times.
      *
-     * @param incrementCount The number of times the iterator will be incremented.
+     * @param[in] incrementCount The number of times the iterator will be incremented.
      */
     void operator+=(const size_t incrementCount) noexcept
     {
@@ -153,7 +153,7 @@ public:
     /**
      * @brief Decrement the iterator given number of times.
      *
-     * @param decrementCount The number of times the iterator will be decremented.
+     * @param[in] decrementCount The number of times the iterator will be decremented.
      */
     void operator-=(const size_t decrementCount) noexcept
     {
@@ -163,18 +163,18 @@ public:
     /**
      * @brief Check if the iterator and referenced other iterator point at the same node.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at the same node, otherwise false.
+     * @return True if the iterators point at the same node, false otherwise.
      */
     bool operator==(const Iterator& other) const noexcept { return myNode == other.myNode; }
 
     /**
      * @brief Check if the iterator and referenced other iterator point at different nodes.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at different nodes, otherwise false.
+     * @return True if the iterators point at different nodes, false otherwise.
      */
     bool operator!=(const Iterator& other) const noexcept { return myNode != other.myNode; }
 
@@ -224,7 +224,7 @@ public:
      /**
      * @brief Create iterator pointing at given node.
      *
-     * @param node Reference to node the iterator is to point at.
+     * @param[in] node Reference to node the iterator is to point at.
      */
     ConstIterator(const Node& node) noexcept
         : myNode{&node} {}
@@ -232,7 +232,7 @@ public:
     /**
      * @brief Create iterator pointing at given node.
      *
-     * @param node Pointer to node the iterator is to point at.
+     * @param[in] node Pointer to node the iterator is to point at.
      */
     ConstIterator(const Node* node) noexcept
         : myNode{node} {}
@@ -245,7 +245,7 @@ public:
     /**
      * @brief Create copy of another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      */
     ConstIterator(const ConstIterator& other) noexcept
         : myNode{other.myNode} {}
@@ -255,7 +255,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      */
     ConstIterator(ConstIterator&& other) noexcept
         : myNode{other.myNode} { other.myNode = nullptr; }
@@ -263,7 +263,7 @@ public:
     /**
      * @brief Copy another iterator.
      * 
-     * @param other Reference to iterator to copy.
+     * @param[in] other Reference to iterator to copy.
      * 
      * @return Reference to this iterator.
      */
@@ -278,7 +278,7 @@ public:
      * 
      *        The other iterator is set to null after the move operation is completed.
      * 
-     * @param other Reference to iterator to move resources from.
+     * @param[in] other Reference to iterator to move resources from.
      * 
      * @return Reference to this iterator.
      */
@@ -341,7 +341,7 @@ public:
     /**
      * @brief Increment the iterator given number of times.
      *
-     * @param incrementCount The number of times the iterator will be incremented.
+     * @param[in] incrementCount The number of times the iterator will be incremented.
      */
     void operator+=(const size_t incrementCount) noexcept
     {
@@ -351,7 +351,7 @@ public:
     /**
      * @brief Decrement the iterator given number of times.
      *
-     * @param decrementCount The number of times the iterator will be decremented.
+     * @param[in] decrementCount The number of times the iterator will be decremented.
      */
     void operator-=(const size_t decrementCount) noexcept
     {
@@ -361,18 +361,18 @@ public:
     /**
      * @brief Check if the iterator and referenced other iterator point at the same node.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at the same node, otherwise false.
+     * @return True if the iterators point at the same node, false otherwise.
      */
     bool operator==(const ConstIterator& other) const noexcept { return myNode == other.myNode; }
 
     /**
      * @brief Check if the iterator and referenced other iterator point at different nodes.
      *
-     * @param other Reference to other iterator.
+     * @param[in] other Reference to other iterator.
      * 
-     * @return True if the iterators point at different nodes, otherwise false.
+     * @return True if the iterators point at different nodes, false otherwise.
      */
     bool operator!=(const ConstIterator& other) const noexcept { return myNode != other.myNode; }
 

@@ -1,14 +1,13 @@
 /**
- * @brief Implementation details of generic system implementation.
+ * @brief Generic system implementation details for an MCU with configurable hardware devices.
  */
 #include <stdint.h>
-
-#include "system.h"
 
 #include "adc_interface.h"
 #include "eeprom_interface.h"
 #include "gpio_interface.h"
 #include "serial_interface.h"
+#include "system.h"
 #include "timer_interface.h"
 #include "watchdog_interface.h"
 
@@ -16,7 +15,7 @@ namespace target
 {
 
 /**
- * @brief Structure holding LED state parameters.
+ * @brief Structure of LED state parameters.
  */
 namespace LedState
 {
@@ -25,24 +24,23 @@ namespace LedState
 };
 
 // -----------------------------------------------------------------------------
-System::System(driver::GpioInterface& led,
-               driver::GpioInterface& button,
-               driver::TimerInterface& debounceTimer,
-               driver::TimerInterface& toggleTimer,
-               driver::SerialInterface& serial,
-               driver::AdcInterface& adc,
-               driver::WatchdogInterface& watchdog,
-               driver::EepromInterface& eeprom) noexcept
+System::System(driver::GpioInterface& led, driver::GpioInterface& button,
+               driver::TimerInterface& debounceTimer, driver::TimerInterface& toggleTimer,
+               driver::SerialInterface& serial, driver::WatchdogInterface& watchdog,
+               driver::EepromInterface& eeprom, driver::AdcInterface& adc) noexcept
     : myLed{led}
     , myButton{button}
     , myDebounceTimer{debounceTimer}
     , myToggleTimer{toggleTimer}
     , mySerial{serial}
-    , myAdc{adc}
     , myWatchdog{watchdog}
     , myEeprom{eeprom}
+    , myAdc{adc}
 {
     myButton.enableInterrupt(true);
+    mySerial.setEnabled(true);
+    myWatchdog.setEnabled(true);
+    myEeprom.setEnabled(true);
     checkLedStateInEeprom();
 }
 
@@ -53,6 +51,7 @@ System::~System() noexcept
     myButton.enableInterrupt(false);
     myDebounceTimer.stop();
     myToggleTimer.stop();
+    myWatchdog.setEnabled(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -114,7 +113,7 @@ void System::checkLedStateInEeprom() noexcept
 {
     if (readLedStateFromEeprom())
     {
-        myToggleTimer.start();;
+        myToggleTimer.start();
         mySerial.printf("Toggle timer enabled!\n");
     }
 }
@@ -129,7 +128,6 @@ void System::writeLedStateToEeprom() noexcept
 bool System::readLedStateFromEeprom() const noexcept
 {
     uint8_t state{};
-    return myEeprom.read(LedState::address, state) ? state == LedState::enabled : false;
+    return myEeprom.read(LedState::address, state) ? LedState::enabled == state : false;
 }
-
 } // namespace target
