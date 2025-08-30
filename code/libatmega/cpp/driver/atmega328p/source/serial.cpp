@@ -1,73 +1,55 @@
 /**
  * @brief Implementation details of serial driver.
  */
-#include "serial.h"
-#include "utils.h"
+#include <avr/io.h>
 
-namespace
-{
-
-/**
- * @brief Structure holding ATmega328P serial transmission parameters.
- */
-struct SerialParam
-{
-    static constexpr char carriageReturn{'\r'};    // Carriage return character.
-    static constexpr char newLine{'\n'};           // New line character.
-    static constexpr uint16_t baudRateValue{103U}; // Baud rate value corresponding to 9600 kbps.
-};
-
-// -----------------------------------------------------------------------------
-void transmitCharacter(const char character) noexcept
-{
-    while (utils::read(UCSR0A, UDRE0) == 0U);
-    UDR0 = character;
-}
-
-// -----------------------------------------------------------------------------
-void init() noexcept
-{
-    static bool initialized{false};
-    if (initialized) { return; }
-    
-    utils::set(UCSR0B, TXEN0);
-    utils::set(UCSR0C, UCSZ00, UCSZ01);
-    UBRR0       = SerialParam::baudRateValue;
-    UDR0        = SerialParam::carriageReturn;
-    initialized = true;
-}
-
-} // namespace 
+#include "driver/atmega328p/serial.h"
+#include "utils/utils.h"
 
 namespace driver 
 {
 namespace atmega328p
 {
+namespace
+{
+/**
+ * @brief Structure holding serial parameters.
+ */
+struct Param
+{
+    // Baud rate in bps.
+    static constexpr uint32_t BaudRate_bps{9600U};
+
+    // Carriage return character.
+    static constexpr char CarriageReturn{'\r'};
+
+    // New line character.
+    static constexpr char NewLine{'\n'};
+};
 
 // -----------------------------------------------------------------------------
-Serial::Serial(const bool enable) noexcept 
-    : myEnabled{enable} 
+void transmitChar(const char character) noexcept
+{
+    // Wait until the previous character has been sent.
+    while (!utils::read(UCSR0A, UDRE0));
+
+    // Put the new character in the transmission register.
+    UDR0 = character;
+}
+} // namespace 
+
+// -----------------------------------------------------------------------------
+SerialInterface& Serial::getInstance() noexcept
 { 
-    init(); 
+    // Create and initialize the singleton serial instance (once only).
+    static Serial myInstance{};
+
+    // Return a reference to the singleton serial instance, cast to the corresponding interface.
+    return myInstance; 
 }
 
 // -----------------------------------------------------------------------------
-Serial::Serial(Serial&& other) noexcept
-    : myEnabled{other.myEnabled}
-{
-    other.myEnabled = false;
-}
-
-// -----------------------------------------------------------------------------
-Serial& Serial::operator=(Serial&& other) noexcept
-{
-    if (&other != this)
-    {
-        myEnabled       = other.myEnabled;
-        other.myEnabled = false;
-    }
-    return *this;
-}
+uint32_t Serial::baudRate_bps() const { return Param::BaudRate_bps; }
 
 // -----------------------------------------------------------------------------
 bool Serial::isInitialized() const noexcept { return true; }
@@ -79,18 +61,42 @@ bool Serial::isEnabled() const noexcept { return myEnabled; }
 void Serial::setEnabled(const bool enable) noexcept { myEnabled = enable; }
 
 // -----------------------------------------------------------------------------
+Serial::Serial() noexcept 
+    : myEnabled{false}
+{ 
+    // Baud rate value corresponding to 9600 kbps.
+    constexpr uint16_t baudRateValue{103U};
+
+    // Enable UART transmission.
+    utils::set(UCSR0B, TXEN0);
+
+    // Set the data size to eight bits per byte.
+    utils::set(UCSR0C, UCSZ00, UCSZ01);
+
+    // Set the baud rate to 9600 kbps.
+    UBRR0 = baudRateValue;
+
+    // Send carriage return to align the first message left.
+    UDR0 = Param::CarriageReturn;
+}
+
+// -----------------------------------------------------------------------------
 void Serial::print(const char* message) const noexcept
 {
+    // Terminate the function if serial transmission isn't enabled.
+    if (!myEnabled) { return; }
+
+    // Transmit each character of the string one by one.
     for (const char* it{message}; *it; ++it)
     {
-        transmitCharacter(*it);
+        transmitChar(*it);
         
-        if (*it == SerialParam::carriageReturn) 
+        // Send new line characters instead of carriage returns.
+        if (Param::CarriageReturn == *it) 
         { 
-            transmitCharacter(SerialParam::newLine); 
+            transmitChar(Param::NewLine); 
         }
     }
 }
-
 } // namespace atmega328p
 } // namespace driver

@@ -1,48 +1,58 @@
 /**
  * @brief Implementation details of miscellaneous utility functions.
  */
- #include "utils.h"
+#ifndef F_CPU
+#define F_CPU 16000000UL // Default CPU frequency measured in Hz.
+#endif
+
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
+#include "utils/utils.h"
 
 namespace utils
-{
-    
+{ 
 // -----------------------------------------------------------------------------
-void delayS(const uint16_t& delayTimeS) noexcept
+void delay_s(const uint16_t& delayTime_s) noexcept
 {
-    for (uint16_t i{}; i < delayTimeS; ++i)
+    for (uint16_t i{}; i < delayTime_s; ++i)
     {
         _delay_ms(1000U);
     }
 }
 
 // -----------------------------------------------------------------------------
-void delayMs(const uint16_t& delayTimeMs) noexcept
+void delay_ms(const uint16_t& delayTime_ms) noexcept
 {
-    for (uint16_t i{}; i < delayTimeMs; ++i)
+    for (uint16_t i{}; i < delayTime_ms; ++i)
     {
         _delay_ms(1U);
     }
 }
 
 // -----------------------------------------------------------------------------
-void delayUs(const uint16_t& delayTimeUs) noexcept
+void delay_us(const uint16_t& delayTime_us) noexcept
 {
-    for (uint16_t i{}; i < delayTimeUs; ++i)
+    for (uint16_t i{}; i < delayTime_us; ++i)
     {
         _delay_us(1U);
     }
 }
 
+// -----------------------------------------------------------------------------
+void globalInterruptEnable() noexcept { asm("SEI"); }
+
+// -----------------------------------------------------------------------------
+void globalInterruptDisable() noexcept { asm("CLI"); }
+
 } // namespace utils
 
-// -----------------------------------------------------------------------------
+/**
+ * @note Definitions required to satisfy the linker when using C++ interfaces and static local 
+ *       variables in embedded projects. 
+ */
 void operator delete(void*, unsigned int) noexcept {}
-
-// -----------------------------------------------------------------------------
 extern "C" void __cxa_pure_virtual() {}
-
-// -----------------------------------------------------------------------------
-extern "C" void __cxa_guard_acquire() {}
-
-// -----------------------------------------------------------------------------
-extern "C" void __cxa_guard_release() {}
+extern "C" int __cxa_guard_acquire (volatile void *g) { return !*(char *)g; }
+extern "C" void __cxa_guard_release (volatile void *g) { *(char *)g = 1; }
+extern "C" void __cxa_guard_abort (volatile void *) {}

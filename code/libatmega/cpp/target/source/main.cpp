@@ -6,57 +6,79 @@
  *            - The aforementioned timer toggles an LED every 100 ms when enabled.
  *            - Another timer reduces the effect of contact bounces after pushing the button.
  *            - A watchdog timer is used to restart the program if it gets stuck somewhere.
+ *            - An EEPROM stream is used to store the LED state. On startup, this value is read;
+ *              if the last stored state before power down was "on," the LED will automatically blink.
  */
-#include "adc.h"
-#include "eeprom.h"
-#include "gpio.h"
-#include "serial.h"
-#include "system.h"
-#include "timer.h"
-#include "watchdog.h"
+#include "driver/atmega328p/adc.h"
+#include "driver/atmega328p/eeprom.h"
+#include "driver/atmega328p/gpio.h"
+#include "driver/atmega328p/serial.h"
+#include "driver/atmega328p/timer.h"
+#include "driver/atmega328p/watchdog.h"
+#include "target/system.h"
+
+using namespace driver::atmega328p;
 
 namespace
 {
+/** Pointer to the system implementation. */
+target::System* mySys{nullptr};
 
-target::System* sys{nullptr}; // Pointer to system implementation.
+/**
+ * @brief Callback for the button.
+ */
+void buttonCallback() noexcept { mySys->handleButtonInterrupt(); }
 
-// -----------------------------------------------------------------------------
-void buttonCallback() noexcept { sys->handleButtonInterrupt(); }
+/**
+ * @brief Callback for the debounce timer.
+ * 
+ *        This callback is invoked whenever the debounce timer elapses.
+ */
+void debounceTimerCallback() noexcept { mySys->handleDebounceTimerInterrupt(); }
 
-// -----------------------------------------------------------------------------
-void debounceTimerCallback() noexcept { sys->handleDebounceTimerInterrupt(); }
-
-// -----------------------------------------------------------------------------
-void toggleTimerCallback() noexcept { sys->handleToggleTimerInterrupt(); }
+/**
+ * @brief Callback for the toggle timer.
+ * 
+ *        This callback is invoked whenever the toggle timer elapses.
+ */
+void toggleTimerCallback() noexcept { mySys->handleToggleTimerInterrupt(); }
 
 } // namespace
 
-
 /**
- * @brief Initialize and run system on target MCU.
+ * @brief Initialize and run the system on the target MCU.
  * 
- * @return Success code 0 upon termination of the program (should never occur).
+ * @return 0 on termination of the program (should never occur).
  */
 int main()
 {
-    using driver::atmega328p::Adc;
-    using driver::atmega328p::Eeprom;
-    using driver::atmega328p::Gpio;
-    using driver::atmega328p::Serial;
-    using driver::atmega328p::Timer;
-    using driver::atmega328p::Watchdog;
-
+    // Initialize the GPIO devices.
     Gpio led{8U, Gpio::Direction::Output};
     Gpio button{13U, Gpio::Direction::InputPullup, buttonCallback};
+
+    // Initialize the timers.
     Timer debounceTimer{300U, debounceTimerCallback};
     Timer toggleTimer{100U, toggleTimerCallback};
-    Serial serial{};
-    Adc adc{};
-    Watchdog watchdog{Watchdog::Timeout::Duration1024ms};
-    Eeprom eeprom{};
 
-    target::System system{led, button, debounceTimer, toggleTimer, serial, adc, watchdog, eeprom};
-    sys = &system;
-    sys->run();
+    // Obtain a reference to the singleton serial device instance.
+    auto& serial{Serial::getInstance()};
+
+    // Obtain a reference to the singleton watchdog timer instance.
+    auto& watchdog{Watchdog::getInstance()};
+
+    // Obtain a reference to the singleton EEPROM instance.
+    auto& eeprom{Eeprom::getInstance()};
+
+    // Obtain a reference to the singleton ADC instance.
+    auto& adc{Adc::getInstance()};
+
+    // Initialize the system with the given hardware.
+    target::System system{led, button, debounceTimer, toggleTimer, serial, watchdog, eeprom, adc};
+    mySys = &system;
+
+    // Run the system perpetually on the target MCU.
+    mySys->run();
+
+    // This point should never be reached; the system is intended to run indefinitely on the target MCU.
     return 0;
 }

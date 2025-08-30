@@ -99,110 +99,110 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGccCpp>
-        <avrgcc.common.Device>-mmcu=atmega328p -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega328p"</avrgcc.common.Device>
-        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
-        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-        <avrgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </avrgcc.compiler.symbols.DefSymbols>
-        <avrgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
-          </ListValues>
-        </avrgcc.compiler.directories.IncludePaths>
-        <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
-        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
-        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-        <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
-        <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
-        <avrgcccpp.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </avrgcccpp.compiler.symbols.DefSymbols>
-        <avrgcccpp.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
-            <Value>../driver/interface</Value>
-            <Value>../driver/atmega328p/include</Value>
-            <Value>../container/include</Value>
-            <Value>../memory/include</Value>
-            <Value>../utils/include</Value>
-            <Value>../target/include</Value>
-          </ListValues>
-        </avrgcccpp.compiler.directories.IncludePaths>
-        <avrgcccpp.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcccpp.compiler.optimization.level>
-        <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
-        <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
-        <avrgcccpp.compiler.miscellaneous.OtherFlags>-std=c++17</avrgcccpp.compiler.miscellaneous.OtherFlags>
-        <avrgcccpp.linker.libraries.Libraries>
-          <ListValues>
-            <Value>libm</Value>
-          </ListValues>
-        </avrgcccpp.linker.libraries.Libraries>
-        <avrgcccpp.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
-          </ListValues>
-        </avrgcccpp.assembler.general.IncludePaths>
-        <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
-      </AvrGccCpp>
+  <avrgcc.common.Device>-mmcu=atmega328p -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega328p"</avrgcc.common.Device>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
+      <Value>../driver/include</Value>
+      <Value>../driver/atmega328p/include</Value>
+      <Value>../container/include</Value>
+      <Value>../memory/include</Value>
+      <Value>../utils/include</Value>
+      <Value>../target/include</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.miscellaneous.OtherFlags>-std=c++17</avrgcccpp.compiler.miscellaneous.OtherFlags>
+  <avrgcccpp.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </avrgcccpp.linker.libraries.Libraries>
+  <avrgcccpp.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
+    </ListValues>
+  </avrgcccpp.assembler.general.IncludePaths>
+  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+</AvrGccCpp>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="container\include\array.h">
+    <Compile Include="container\include\container\array.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\impl\array_impl.h">
+    <Compile Include="container\include\container\impl\array_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\impl\list_impl.h">
+    <Compile Include="container\include\container\impl\list_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\impl\vector_impl.h">
+    <Compile Include="container\include\container\impl\vector_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\iterator\array_iterator.h">
+    <Compile Include="container\include\container\iterator\array_iterator.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\iterator\list_iterator.h">
+    <Compile Include="container\include\container\iterator\list_iterator.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\iterator\vector_iterator.h">
+    <Compile Include="container\include\container\iterator\vector_iterator.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\list.h">
+    <Compile Include="container\include\container\list.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="container\include\vector.h">
+    <Compile Include="container\include\container\vector.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\atmega328p\include\adc.h">
+    <Compile Include="driver\atmega328p\include\driver\atmega328p\adc.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\atmega328p\include\eeprom.h">
+    <Compile Include="driver\atmega328p\include\driver\atmega328p\eeprom.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\atmega328p\include\gpio.h">
+    <Compile Include="driver\atmega328p\include\driver\atmega328p\gpio.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\atmega328p\include\serial.h">
+    <Compile Include="driver\atmega328p\include\driver\atmega328p\serial.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\atmega328p\include\timer.h">
+    <Compile Include="driver\atmega328p\include\driver\atmega328p\timer.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\atmega328p\include\watchdog.h">
+    <Compile Include="driver\atmega328p\include\driver\atmega328p\watchdog.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="driver\atmega328p\source\adc.cpp">
@@ -223,37 +223,37 @@
     <Compile Include="driver\atmega328p\source\watchdog.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\interface\adc_interface.h">
+    <Compile Include="driver\include\driver\adc\interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\interface\eeprom_interface.h">
+    <Compile Include="driver\include\driver\eeprom\interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\interface\gpio_interface.h">
+    <Compile Include="driver\include\driver\gpio\interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\interface\serial_interface.h">
+    <Compile Include="driver\include\driver\serial\interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\interface\timer_interface.h">
+    <Compile Include="driver\include\driver\timer\interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="driver\interface\watchdog_interface.h">
+    <Compile Include="driver\include\driver\watchdog\interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="memory\include\impl\shared_ptr_impl.h">
+    <Compile Include="memory\include\memory\impl\shared_ptr_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="memory\include\impl\unique_ptr_impl.h">
+    <Compile Include="memory\include\memory\impl\unique_ptr_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="memory\include\shared_ptr.h">
+    <Compile Include="memory\include\memory\shared_ptr.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="memory\include\unique_ptr.h">
+    <Compile Include="memory\include\memory\unique_ptr.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="target\include\system.h">
+    <Compile Include="target\include\target\system.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="target\source\main.cpp">
@@ -262,25 +262,25 @@
     <Compile Include="target\source\system.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\callback_array.h">
+    <Compile Include="utils\include\utils\callback_array.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\impl\callback_array_impl.h">
+    <Compile Include="utils\include\utils\impl\callback_array_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\impl\pair_impl.h">
+    <Compile Include="utils\include\utils\impl\pair_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\impl\utils_impl.h">
+    <Compile Include="utils\include\utils\impl\utils_impl.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\pair.h">
+    <Compile Include="utils\include\utils\pair.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\type_traits.h">
+    <Compile Include="utils\include\utils\type_traits.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="utils\include\utils.h">
+    <Compile Include="utils\include\utils\utils.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="utils\source\utils.cpp">
@@ -289,23 +289,36 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="container" />
-    <Folder Include="container\include\impl\" />
-    <Folder Include="container\include\iterator\" />
     <Folder Include="container\include" />
+    <Folder Include="container\include\container\" />
+    <Folder Include="container\include\container\impl\" />
+    <Folder Include="container\include\container\iterator\" />
     <Folder Include="driver" />
     <Folder Include="driver\atmega328p" />
     <Folder Include="driver\atmega328p\include" />
+    <Folder Include="driver\atmega328p\include\driver" />
+    <Folder Include="driver\atmega328p\include\driver\atmega328p\" />
     <Folder Include="driver\atmega328p\source" />
-    <Folder Include="driver\interface" />
+    <Folder Include="driver\include\driver" />
+    <Folder Include="driver\include\driver\adc\" />
+    <Folder Include="driver\include\driver\eeprom" />
+    <Folder Include="driver\include\driver\gpio" />
+    <Folder Include="driver\include\driver\watchdog" />
+    <Folder Include="driver\include\driver\timer" />
+    <Folder Include="driver\include\driver\serial" />
+    <Folder Include="driver\include" />
     <Folder Include="memory" />
     <Folder Include="memory\include" />
-    <Folder Include="memory\include\impl" />
+    <Folder Include="memory\include\memory" />
+    <Folder Include="memory\include\memory\impl\" />
     <Folder Include="target" />
     <Folder Include="target\include" />
+    <Folder Include="target\include\target" />
     <Folder Include="target\source" />
     <Folder Include="utils" />
     <Folder Include="utils\include" />
-    <Folder Include="utils\include\impl" />
+    <Folder Include="utils\include\utils\" />
+    <Folder Include="utils\include\utils\impl\" />
     <Folder Include="utils\source" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

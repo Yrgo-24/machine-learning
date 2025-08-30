@@ -1,9 +1,8 @@
-# `ATmega328P` library
+# `ATmega328P` library - C++ version
 
 ## Description
 Library containing miscellaneous drivers and containers for microcontroller `ATmega328P`.  
 The code is written in C++17 and adapted for Microchip Studio. 
-
 
 ## Content
 The library includes the following drivers:  
@@ -30,12 +29,3 @@ The library also includes miscellaneous utility functions, type traits etc.
 ## Usage 
 This library must be opened in a Windows environment to build.  
 Copy the library into a Windows path, such as the C drive, before building.
-
-### Setup
-
-Install the AVR toolchain:
-
-```bash
-sudo apt -y update
-sudo apt -y install gcc-avr binutils-avr avr-libc avrdude
-```

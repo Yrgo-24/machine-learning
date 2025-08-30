@@ -1,8 +1,10 @@
 /**
- * @brief Implementation details of ATmega328P ADC driver.
+ * @brief ADC driver implementation details for the ATmega328P ADC (A/D converter).
  */
-#include "adc.h"
-#include "utils.h"
+#include <avr/io.h>
+
+#include "driver/atmega328p/adc.h"
+#include "utils/utils.h"
 
 namespace driver 
 {
@@ -10,29 +12,35 @@ namespace atmega328p
 {
 namespace 
 {
-
 /**
- * @brief Structure holding ATmega328P ADC parameters.
+ * @brief Structure of ATmega328P ADC parameters.
  */
 struct AdcParam
 {
-    static constexpr uint8_t resolution{10U};   // Resolution in bits.
-    static constexpr uint16_t maxValue{1023U};  // Max value of the ADC.
-    static constexpr double supplyVoltage{5.0}; // Supply voltage in Volts.
-    static constexpr uint8_t portOffset{14U};   // ADC port offset (pin [14:19] == port [A0:A5]).
+    /** Resolution in bits. */
+    static constexpr uint8_t Resolution{10U};
+
+    /** Max value of the ADC (limited by the resolution). */
+    static constexpr uint16_t MaxValue{1023U};
+
+    /** Supply voltage in Volts. */
+    static constexpr double SupplyVoltage{5.0};
+
+    /** ADC port offset (pin [14:19] == port [A0:A5]). */
+    static constexpr uint8_t PortOffset{14U};
 };
 
 // -----------------------------------------------------------------------------
 constexpr bool isPinNumberValid(const uint8_t pin) noexcept
 {
-    return (pin >= Adc::Pin::A0 && pin <=  Adc::Pin::A5) 
-        || (pin >=  Adc::Port::C0 && pin <=  Adc::Port::C5);
+    return utils::inRange(pin, Adc::Pin::A0, Adc::Pin::A5) 
+        || utils::inRange(pin, Adc::Port::C0, Adc::Port::C5);
 }
 
 // -----------------------------------------------------------------------------
 constexpr uint8_t isPinAdjustedForOffset(const uint8_t pin) noexcept
 {
-    return pin <=  Adc::Pin::A5 ? pin : pin - AdcParam::portOffset;
+    return Adc::Pin::A5 >= pin ? pin : pin - AdcParam::PortOffset;
 }
 
 // -----------------------------------------------------------------------------
@@ -45,42 +53,26 @@ inline uint16_t adcValue(const uint8_t pin) noexcept
     utils::set(ADCSRA, ADIF);
     return ADC;
 }
-
 } // namespace 
 
 // -----------------------------------------------------------------------------
-Adc::Adc(const bool enable) noexcept
-    : myEnabled{enable}
-{
-    init();
+AdcInterface& Adc::getInstance() noexcept
+{ 
+    // Create and initialize the singleton ADC instance (once only).
+    static Adc myInstance{};
+
+    // Return a reference to the singleton ADC instance, cast to the corresponding interface.
+    return myInstance; 
 }
 
 // -----------------------------------------------------------------------------
-Adc::Adc(Adc&& other) noexcept
-    : myEnabled{other.myEnabled}
-{
-    other.myEnabled = false;
-}
+uint8_t Adc::resolution() const noexcept { return AdcParam::Resolution; }
 
 // -----------------------------------------------------------------------------
-Adc& Adc::operator=(Adc&& other) noexcept
-{
-    if (&other != this)
-    {
-        myEnabled       = other.myEnabled;
-        other.myEnabled = false;
-    }
-    return *this;
-}
+uint16_t Adc::maxValue() const noexcept { return AdcParam::MaxValue; }
 
 // -----------------------------------------------------------------------------
-uint8_t Adc::resolution() const noexcept { return AdcParam::resolution; }
-
-// -----------------------------------------------------------------------------
-uint16_t Adc::maxValue() const noexcept { return AdcParam::maxValue; }
-
-// -----------------------------------------------------------------------------
-double Adc::supplyVoltage() const noexcept { return AdcParam::supplyVoltage; }
+double Adc::supplyVoltage() const noexcept { return AdcParam::SupplyVoltage; }
 
 // -----------------------------------------------------------------------------
 uint16_t Adc::read(const uint8_t analogPin) const noexcept
@@ -91,13 +83,13 @@ uint16_t Adc::read(const uint8_t analogPin) const noexcept
 // -----------------------------------------------------------------------------
 double Adc::dutyCycle(const uint8_t analogPin) const noexcept
 {
-    return read(analogPin) / static_cast<double>(AdcParam::maxValue);
+    return read(analogPin) / static_cast<double>(AdcParam::MaxValue);
 }
 
 // -----------------------------------------------------------------------------
 double Adc::inputVoltage(const uint8_t analogPin) const noexcept
 {
-    return dutyCycle(analogPin) * AdcParam::supplyVoltage;
+    return dutyCycle(analogPin) * AdcParam::SupplyVoltage;
 }
 
 // -----------------------------------------------------------------------------
@@ -110,7 +102,10 @@ bool Adc::isEnabled() const noexcept { return myEnabled; }
 void Adc::setEnabled(const bool enable) noexcept { myEnabled = enable; }
 
 // -----------------------------------------------------------------------------
-void Adc::init() const noexcept { read(Pin::A0); }
-
+Adc::Adc() noexcept
+    : myEnabled{false}
+{
+    read(Pin::A0);
+}
 } // namespace atmega328p
 } // namespace driver

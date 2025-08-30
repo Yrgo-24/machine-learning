@@ -1,8 +1,10 @@
 /**
- * @brief Implementation details of ATmega328P watchdog driver.
+ * @brief Watchdog timer driver implementation details for ATmega328P.
  */
-#include "utils.h"
-#include "watchdog.h"
+#include <avr/io.h>
+
+#include "utils/utils.h"
+#include "driver/atmega328p/watchdog.h"
 
 namespace driver 
 {
@@ -10,28 +12,23 @@ namespace atmega328p
 {
 namespace 
 {
-
 /**
- * @param Structure holding ATmega328P Watchdog timer parameters.
+ * @brief Structure of ATmega328P watchdog timer parameters.
  */
 struct WatchdogParam
 {
-    static bool circuitReserved; // Indicate whether the only available circuit is reserved.
+    /** Default watchdog timeout (1024 ms). */
+    static constexpr auto DefaultTimeout{Watchdog::Timeout::Duration1024ms};
 };
-
-bool WatchdogParam::circuitReserved{false};
-
-// -----------------------------------------------------------------------------
-inline bool isCircuitReserved() noexcept { return WatchdogParam::circuitReserved; }
 
 // -----------------------------------------------------------------------------
 constexpr bool isTimeoutValid(const Watchdog::Timeout timeout) noexcept
 {
-    return timeout != Watchdog::Timeout::Invalid;
+    return static_cast<uint16_t>(Watchdog::Timeout::Invalid) > static_cast<uint16_t>(timeout);
 }
     
 // -----------------------------------------------------------------------------
-constexpr uint8_t timeoutValue(const Watchdog::Timeout timeout) noexcept
+uint8_t timeoutValue(const Watchdog::Timeout timeout) noexcept
 {
     switch (timeout)
     {
@@ -56,109 +53,90 @@ constexpr uint8_t timeoutValue(const Watchdog::Timeout timeout) noexcept
         case Watchdog::Timeout::Duration8192ms:
             return (1U << WDP3) | (1U << WDP0);
         default:
-            return 0xFF;
+            return 0xFFU;
     }
 }
-
-// -----------------------------------------------------------------------------
-void resetWatchdogInHardware() noexcept { asm("WDR"); }
-
-// -----------------------------------------------------------------------------
-void clearWatchdogResetFlag() noexcept { utils::clear(MCUSR, WDRF); }
-
 } // namespace
 
 // -----------------------------------------------------------------------------
-Watchdog::Watchdog(const Timeout timeout, const bool enable) noexcept
-    : myTimeout{timeout}
-    , myInitialized{init(myTimeout)}
-    , myEnabled{false}
+WatchdogInterface& Watchdog::getInstance() noexcept
 {
-    if (myInitialized && enable) { setEnabled(enable); }
+    // Create and initialize the singleton watchdog timer instance (once only).
+    static Watchdog myInstance{};
+
+    // Return a reference to the singleton watchdog instance, cast to the corresponding interface.
+    return myInstance; 
 }
 
 // -----------------------------------------------------------------------------
-Watchdog::~Watchdog() noexcept { disable(); }
-
-// -----------------------------------------------------------------------------
-Watchdog::Watchdog(Watchdog&& other) noexcept
-    : myTimeout{other.myTimeout}
-    , myInitialized{other.myInitialized}
-    , myEnabled{other.myEnabled}
-{
-    other.myTimeout     = Timeout::Invalid;
-    other.myInitialized = false;
-    other.myEnabled     = false;
-}
-
-// -----------------------------------------------------------------------------
-Watchdog& Watchdog::operator=(Watchdog&& other) noexcept
-{
-    if (&other != this)
-    {
-        disable();
-        myTimeout     = other.myTimeout;
-        myEnabled     = other.myEnabled;
-        myInitialized = other.myInitialized;
-
-        other.myTimeout     = Timeout::Invalid;
-        other.myEnabled     = false;
-        other.myInitialized = false;
-    }
-    return *this;
-}
-
-// -----------------------------------------------------------------------------
-bool Watchdog::isInitialized() const noexcept { return myInitialized; }
+bool Watchdog::isInitialized() const noexcept { return true; }
 
 // -----------------------------------------------------------------------------
 bool Watchdog::isEnabled() const noexcept { return myEnabled; }
 
 // -----------------------------------------------------------------------------
-uint16_t Watchdog::timeoutMs() const noexcept { return static_cast<uint16_t>(myTimeout); }
-
-// -----------------------------------------------------------------------------
 void Watchdog::setEnabled(const bool enable) noexcept
 {
-    if (!myInitialized) { return; }
+    // Reset the watchdog to prevent a timeout during the enablement update.
     reset();
+
+    // Update the enablement status, disable interrupts during the write sequence.
     utils::globalInterruptDisable();
     utils::set(WDTCSR, WDCE, WDE);
     if (enable) { utils::set(WDTCSR, WDE); }
     else { utils::clear(WDTCSR, WDE); }
-    utils::globalInterruptDisable();
+
+    // Re-enable interrupts once the write sequence is complete.
+    utils::globalInterruptEnable();
 }
+
+// -----------------------------------------------------------------------------
+uint16_t Watchdog::timeoutMs() const noexcept { return static_cast<uint16_t>(myTimeout); }
 
 // -----------------------------------------------------------------------------
 void Watchdog::reset() noexcept 
 { 
-    if (!myInitialized) { return; }
+    // Disable interrupts during the reset process.
     utils::globalInterruptDisable();
-    resetWatchdogInHardware();
-    clearWatchdogResetFlag();
+
+    // Reset the watchdog and clear the corresponding reset flag.
+    asm("WDR");
+    utils::clear(MCUSR, WDRF);
+
+    // Re-enable interrupts once the reset process is complete.
     utils::globalInterruptEnable();
 }
 
 // -----------------------------------------------------------------------------
-bool Watchdog::init(const Timeout timeoutMs) noexcept
+bool Watchdog::setTimeout(const Timeout timeout) noexcept
 {
-    if (isCircuitReserved() || !isTimeoutValid(timeoutMs)) { return false; }
+    // Return false if the timeout is invalid.
+    if (!isTimeoutValid(timeout)) { return false; }
+
+    // Calculate the timeout value before the timed write sequence.
+    const auto value{timeoutValue(timeout)};
+
+    // Update the watchdog timeout, disable interrupts during the write sequence.
     utils::globalInterruptDisable();
-    utils::set(WDTCSR, WDCE, WDE);
-    WDTCSR = timeoutValue(timeoutMs);
+    WDTCSR |= (1UL << WDCE) | (1UL << WDE);
+    WDTCSR = value;
     utils::globalInterruptEnable();
+
+    // Re-enable interrupts once the write sequence is complete.
+    utils::globalInterruptEnable();
+
+    // Store the new timeout and return true to indicate success.
+    myTimeout = timeout;
     return true;
 } 
 
 // -----------------------------------------------------------------------------
-void Watchdog::disable() noexcept
+Watchdog::Watchdog() noexcept
+    : myTimeout{}
+    , myEnabled{false}
 {
-    if (myInitialized)
-    {
-        setEnabled(false);
-        WatchdogParam::circuitReserved = false;
-    }
+    // Set the default timeout.
+    setTimeout(WatchdogParam::DefaultTimeout);
 }
-
 } // namespace atmega328p
 } // namespace driver

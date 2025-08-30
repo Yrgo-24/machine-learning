@@ -1,9 +1,11 @@
 /**
- * @brief Implementation details of ATmega328P GPIO device driver.
+ * @brief GPIO driver implementation details for ATmega328P.
  */
-#include "callback_array.h"
-#include "gpio.h"
-#include "utils.h"
+#include <avr/interrupt.h>
+
+#include "driver/atmega328p/gpio.h"
+#include "utils/callback_array.h"
+#include "utils/utils.h"
 
 namespace driver 
 {
@@ -11,9 +13,8 @@ namespace atmega328p
 {
 namespace
 {
-
 /**
- * @brief Structure containing indexes for callbacks associated with the I/O ports.
+ * @brief Structure of indexes for callbacks associated with the I/O ports.
  */
 struct CallbackIndex
 {
@@ -23,8 +24,8 @@ struct CallbackIndex
 };
 
 /**
- * @brief Struct containing pin offsets, i.e. the discrepancy between the Arduino and the
- *        ATmega328P pin numbers, for each I/O port.
+ * @brief Structure of pin offsets, i.e. the discrepancy between the Arduino and the ATmega328p
+ *        pin numbers, for each I/O port.
  */
 struct PinOffset
 {
@@ -38,17 +39,27 @@ struct PinOffset
  */
 struct GpioParam
 {
-    static constexpr uint8_t ioPortCount{3U};               // The number of available I/O ports.
-    static constexpr uint8_t pinCount{20U};                 // The number of available GPIO pins.
-    static container::CallbackArray<ioPortCount> callbacks; // Pointers to callbacks.
-    static uint32_t pinRegistry;                            // Pin registry (1 = reserved).
+    /** The number of available I/O ports. */
+    static constexpr uint8_t IoPortCount{3U};
+
+    /** The number of available GPIO pins. */
+    static constexpr uint8_t PinCount{20U};
+
+    /** Pointers to callbacks. */
+    static container::CallbackArray<IoPortCount> callbacks;
+
+    /** Pin registry (1 = reserved, 0 = free). */
+    static uint32_t pinRegistry;
 };
 
-container::CallbackArray<GpioParam::ioPortCount> GpioParam::callbacks{};
+/** Pointers to callbacks. */
+container::CallbackArray<GpioParam::IoPortCount> GpioParam::callbacks{};
+
+/** Pin registry (1 = reserved, 0 = free). */
 uint32_t GpioParam::pinRegistry{};
 
 // -----------------------------------------------------------------------------
-constexpr bool isPinNumberValid(const uint8_t pin) noexcept { return pin < GpioParam::pinCount; }
+constexpr bool isPinNumberValid(const uint8_t pin) noexcept { return GpioParam::PinCount > pin; }
 
 // -----------------------------------------------------------------------------
 constexpr bool isPinReserved(const uint8_t pin) noexcept
@@ -59,19 +70,19 @@ constexpr bool isPinReserved(const uint8_t pin) noexcept
 // -----------------------------------------------------------------------------
 constexpr bool isPinConnectedToPortB(const uint8_t pin) noexcept
 {
-    return pin >= Gpio::Port::B0 && pin <= Gpio::Port::B5;
+    return utils::inRange(pin, Gpio::Port::B0, Gpio::Port::B5);
 }
 
 // -----------------------------------------------------------------------------
 constexpr bool isPinConnectedToPortC(const uint8_t pin) noexcept
 {
-    return pin >= Gpio::Port::C0 && pin <= Gpio::Port::C5;
+    return utils::inRange(pin, Gpio::Port::C0, Gpio::Port::C5);
 }
 
 // -----------------------------------------------------------------------------
 constexpr bool isPinConnectedToPortD(const uint8_t pin) noexcept
 {
-    return pin >= Gpio::Port::D0 && pin <= Gpio::Port::D7;
+    return utils::inRange(pin, Gpio::Port::D0, Gpio::Port::D5);
 }
 
 // -----------------------------------------------------------------------------
@@ -86,7 +97,7 @@ constexpr uint8_t getPhysicalPin(const uint8_t pin) noexcept
 // -----------------------------------------------------------------------------
 constexpr bool isDirectionValid(const Gpio::Direction direction) noexcept
 {
-    return direction < Gpio::Direction::Count;
+    return Gpio::Direction::Count > direction;
 }
 
 // -----------------------------------------------------------------------------
@@ -94,22 +105,33 @@ inline void invokeCallback(const uint8_t port) noexcept
 {
     GpioParam::callbacks.invoke(port);
 }
-
 } // namespace
 
 /**
- * @brief Structure for implementation of GPIO hardware.
+ * @brief GPIO hardware structure.
  */
 struct Gpio::Hardware 
 {
-    volatile uint8_t& dirReg;   // Reference to data direction register.
-    volatile uint8_t& portReg;  // Reference to port (output) register.
-    volatile uint8_t& pinReg;   // Reference to pin (input) register.
-    volatile uint8_t& pcMskReg; // Reference to pin change interrupt mask register.
-    const uint8_t pciBit;       // Control bit in the pin change interrupt control register.
-    const IoPort port;          // I/O port associated with the device.
+    /** Reference to data direction register (DDRx). */
+    volatile uint8_t& dirReg;
+
+    /** Reference to port (output) register (PORTx). */
+    volatile uint8_t& portReg;
+
+    /** Reference to pin (input) register (PINx). */
+    volatile uint8_t& pinReg;
+
+    /** Reference to pin change interrupt mask register (PCMSKx). */
+    volatile uint8_t& pcMskReg;
+
+    /** Control bit in the pin change interrupt control register (PCIEx). */
+    const uint8_t pciBit;
+
+    /** I/O port associated with the GPIO. */
+    const IoPort port;
 };
 
+/** Hardware structure for I/O port B. */
 struct Gpio::Hardware Gpio::myHwPortB
 {
     .dirReg   = DDRB,
@@ -120,6 +142,7 @@ struct Gpio::Hardware Gpio::myHwPortB
     .port     = Gpio::IoPort::B,
 };
 
+/** Hardware structure for I/O port C. */
 struct Gpio::Hardware Gpio::myHwPortC
 {
     .dirReg   = DDRC,
@@ -130,6 +153,7 @@ struct Gpio::Hardware Gpio::myHwPortC
     .port     = Gpio::IoPort::C,
 };
 
+/** Hardware structure for I/O port D. */
 struct Gpio::Hardware Gpio::myHwPortD
 {
     .dirReg   = DDRD,
@@ -145,6 +169,7 @@ Gpio::Gpio(const uint8_t pin, const Direction direction, void (*callback)()) noe
     : myHardware{reserve(pin, direction)}
     , myPin{getPhysicalPin(pin)}
 { 
+    // Set the data direction (and potentially the callback) if the pin was reserved.
     if (myHardware)
     {
         setDirection(direction);
@@ -153,33 +178,19 @@ Gpio::Gpio(const uint8_t pin, const Direction direction, void (*callback)()) noe
 }
 
 // -----------------------------------------------------------------------------
-Gpio::~Gpio() noexcept { disable(); }
+Gpio::~Gpio() noexcept 
+{ 
+    // Free resources used for the GPIO before deletion.
+    utils::clear(myHardware->dirReg, myPin);
+    utils::clear(myHardware->portReg, myPin);
+    utils::clear(GpioParam::pinRegistry, myPin);
 
-// -----------------------------------------------------------------------------
-Gpio::Gpio(Gpio&& other) noexcept
-    : myHardware{other.myHardware}
-    , myPin{other.myPin}
-{
-    other.myHardware = nullptr;
-    other.myPin      = static_cast<uint8_t>(-1);
+    enableInterrupt(false);
+    myHardware = nullptr; 
 }
 
 // -----------------------------------------------------------------------------
-Gpio& Gpio::operator=(Gpio&& other) noexcept
-{
-    if (&other != this)
-    {
-        disable();
-        myHardware       = other.myHardware;
-        myPin            = other.myPin;
-        other.myHardware = nullptr;
-        other.myPin      = static_cast<uint8_t>(-1);
-    }
-    return *this;
-}
-
-// -----------------------------------------------------------------------------
-uint8_t Gpio::operator()() noexcept { return myPin; }
+uint8_t Gpio::operator()() const noexcept { return myPin; }
 
 // -----------------------------------------------------------------------------
 uint8_t Gpio::pin() const noexcept { return myPin; }
@@ -188,7 +199,7 @@ uint8_t Gpio::pin() const noexcept { return myPin; }
 Gpio::IoPort Gpio::port() const noexcept { return myHardware->port; };
 
 // -----------------------------------------------------------------------------
-bool Gpio::isInitialized() const noexcept { return myHardware != nullptr; }
+bool Gpio::isInitialized() const noexcept { return nullptr != myHardware; }
 
 // -----------------------------------------------------------------------------
 bool Gpio::read() const noexcept { return utils::read(myHardware->pinReg, myPin); }
@@ -196,6 +207,7 @@ bool Gpio::read() const noexcept { return utils::read(myHardware->pinReg, myPin)
 // -----------------------------------------------------------------------------
 void Gpio::write(const bool output) noexcept
 {
+    // Set/clear the output as requested.
     if (output) { utils::set(myHardware->portReg, myPin); }
     else { utils::clear(myHardware->portReg, myPin); }
 }
@@ -206,13 +218,15 @@ void Gpio::toggle() noexcept { utils::set(myHardware->pinReg, myPin); }
 // -----------------------------------------------------------------------------
 void Gpio::enableInterruptOnPort(const bool enable) noexcept 
 { 
-    if (enable) { utils::set(PCICR, static_cast<uint8_t>(port())); }
-    else { utils::clear(PCICR, static_cast<uint8_t>(port())); }
+    // Enable/disable interrupts on the associated port as requested.
+    if (enable) { utils::set(PCICR, myHardware->pciBit); }
+    else { utils::clear(PCICR, myHardware->pciBit); }
 }
 
 // -----------------------------------------------------------------------------
 void Gpio::enableInterrupt(const bool enable) noexcept
 {
+    // Enable/disable interrupts on the associated pin as requested.
     if (enable)
     {
         utils::globalInterruptEnable();
@@ -223,24 +237,33 @@ void Gpio::enableInterrupt(const bool enable) noexcept
 }
 
 // -----------------------------------------------------------------------------
-void Gpio::blink(const uint16_t& blinkSpeedMs) noexcept
+void Gpio::blink(const uint16_t& blinkSpeed_ms) noexcept
 {
     toggle();
-    utils::delayMs(blinkSpeedMs);
+    utils::delay_ms(blinkSpeed_ms);
 }
 
 // -----------------------------------------------------------------------------
 Gpio::Hardware* Gpio::reserve(const uint8_t pin, const Direction direction) noexcept
 {
-if (!isPinNumberValid(pin) || isPinReserved(pin) || !isDirectionValid(direction)) { return nullptr; }
-    Hardware* hardware{initHardware(pin)};
+    // Return a nullptr if the given pin is reserved or any of the given parameters are invalid.
+    if (!isPinNumberValid(pin) || !isDirectionValid(direction) || isPinReserved(pin)) 
+    { 
+        return nullptr; 
+    }
+
+    // Initialize the hardware, register the given pin on success.
+    auto hardware{initHardware(pin)};
     if (hardware) { utils::set(GpioParam::pinRegistry, pin); }
+
+    // Return a pointer to the hardware used, or a nullptr on failure.
     return hardware;
 }
 
 // -----------------------------------------------------------------------------
 Gpio::Hardware* Gpio::initHardware(const uint8_t pin) noexcept
 {
+    // Return a pointer to the corresponding structure, or a nullptr if the pin number is invalid.
     if (isPinConnectedToPortB(pin))      { return &myHwPortB; }
     else if (isPinConnectedToPortC(pin)) { return &myHwPortC; }
     else if (isPinConnectedToPortD(pin)) { return &myHwPortD; }
@@ -250,6 +273,7 @@ Gpio::Hardware* Gpio::initHardware(const uint8_t pin) noexcept
 // -----------------------------------------------------------------------------
 void Gpio::setDirection(const Direction direction) noexcept
 {
+    // Set the GPIO direction by writing to the hardware registers.
     if (direction == Direction::InputPullup) { utils::set(myHardware->portReg, myPin); } 
     else if (direction == Direction::Output) { utils::set(myHardware->dirReg, myPin); }
 }
@@ -257,6 +281,7 @@ void Gpio::setDirection(const Direction direction) noexcept
 // -----------------------------------------------------------------------------
 void Gpio::setCallback(void (*callback)()) const noexcept
 {
+    // Register the given callback for the associated I/O port.
     if (myHardware->portReg == PORTB)      
     { 
         GpioParam::callbacks.add(callback, CallbackIndex::PortB); 
@@ -269,17 +294,6 @@ void Gpio::setCallback(void (*callback)()) const noexcept
     { 
         GpioParam::callbacks.add(callback, CallbackIndex::PortD); 
     }
-}
-
-// -----------------------------------------------------------------------------
-void Gpio::disable() noexcept
-{
-    utils::clear(myHardware->dirReg, myPin);
-    utils::clear(myHardware->portReg, myPin);
-    utils::clear(GpioParam::pinRegistry, myPin);
-
-    enableInterrupt(false);
-    myHardware = nullptr;
 }
 
 // -----------------------------------------------------------------------------
