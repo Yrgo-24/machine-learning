@@ -52,14 +52,11 @@ private:
 };
 
 // -----------------------------------------------------------------------------
-//! \note Function templates must be defined in the header file, since the 
-//!       compiler requires the function definition at compile-time.
-// -----------------------------------------------------------------------------
 template <typename... Args>
 bool SerialInterface::printf(const char* format, const Args&... args) const noexcept
 {
-    // Note to reader: Function templates must be defined in the header file, since the compiler
-    // needs the definition at compile-time.
+    //! @note Function templates must be defined in the header file, since the compiler
+    //!       needs the definition at compile-time.
 
     // Return false is the given format string is invalid.
     if (nullptr == format) { return false; }

@@ -10,8 +10,8 @@ namespace driver
 /**
  * @brief Serial driver for ATmega328P.
  * 
- *        This implementation follows the singleton design pattern, since only a single
- *        serial instance can be implemented.
+ *        Use the singleton design pattern to ensure only one serial device instance exists,
+ *        reflecting the hardware limitation of a single serial port on the MCU.
  */
 class Serial final : public SerialInterface
 {
@@ -52,8 +52,5 @@ private:
      * @param[in] str The string to print.
      */
     void print(const char* str) const noexcept override;
-
-    // Singleton serial instance.
-    static Serial myInstance;
 };
 } // namespace driver

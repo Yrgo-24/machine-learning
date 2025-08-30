@@ -6,18 +6,17 @@
 #include "serial.h"
 
 /**
- * @note These lines have to be added to an arbitrary C++ source file in order to use interfaces
- *       for Atmega328P in Microchip Studio.
+ * @note Definitions required to satisfy the linker when using C++ interfaces and static local 
+ *       variables in embedded projects. 
  */
-void operator delete(void* ptr) noexcept { (void) (ptr); }
-void operator delete(void* ptr, unsigned int) noexcept { operator delete(ptr); }
-extern "C" void __cxa_pure_virtual() { while (1) {} }
+void operator delete(void*, unsigned int) noexcept {}
+extern "C" void __cxa_pure_virtual() {}
+extern "C" int __cxa_guard_acquire (volatile void *g) { return !*(char *)g; }
+extern "C" void __cxa_guard_release (volatile void *g) { *(char *)g = 1; }
+extern "C" void __cxa_guard_abort (volatile void *) {}
 
 namespace driver 
 {
-// Singleton serial instance.
-Serial Serial::myInstance{};
-
 namespace
 {
 /**
@@ -47,7 +46,14 @@ void transmitChar(const char character) noexcept
 } // namespace 
 
 // -----------------------------------------------------------------------------
-SerialInterface& Serial::getInstance() noexcept { return myInstance; }
+SerialInterface& Serial::getInstance() noexcept 
+{
+    // Create and initialize the singleton serial instance (once only).
+    static Serial myInstance{};
+
+    // Return a reference to the singleton serial instance, cast to the corresponding interface.
+    return myInstance; 
+}
 
 // -----------------------------------------------------------------------------
 uint32_t Serial::baudRate_bps() const { return Param::BaudRate_bps; }
@@ -59,7 +65,7 @@ Serial::Serial() noexcept
     constexpr uint16_t baudRateValue{103U};
 
     // Enable UART transmission.
-    UCSR0B |= (1UL << TXEN0);
+    UCSR0B = (1UL << TXEN0);
 
     // Set the data size to eight bits per byte.
     UCSR0C = ((1UL << UCSZ00) | (1UL << UCSZ01));
