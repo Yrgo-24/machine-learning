@@ -77,7 +77,7 @@ List<T>::List(List<T>&& other) noexcept
 
 // -----------------------------------------------------------------------------
 template <typename T>
-List<T>::List<T>& operator=(const List<T>& other) noexcept
+List<T>& List<T>::operator=(const List<T>& other) noexcept
 {
     clear();
     copy(other);
@@ -86,7 +86,7 @@ List<T>::List<T>& operator=(const List<T>& other) noexcept
 
 // -----------------------------------------------------------------------------
 template <typename T>
-List<T>::List<T>& operator=(List<T>&& other) noexcept
+List<T>& List<T>::operator=(List<T>&& other) noexcept
 {
     clear();
     myFirst = other.myFirst;
@@ -101,7 +101,7 @@ List<T>::List<T>& operator=(List<T>&& other) noexcept
 
 // -----------------------------------------------------------------------------
 template <typename T>
-List<T>& operator+=(const List<T>& other) noexcept 
+List<T>& List<T>::operator+=(const List<T>& other) noexcept 
 { 
     copy(other); 
     return *this;

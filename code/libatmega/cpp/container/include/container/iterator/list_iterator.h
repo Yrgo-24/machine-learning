@@ -146,7 +146,7 @@ public:
      */
     void operator+=(const size_t incrementCount) noexcept
     {
-        for (std::size_t i{}; i < incrementCount; ++i) { myNode = myNode->next; }
+        for (size_t i{}; i < incrementCount; ++i) { myNode = myNode->next; }
     }
 
     /**
@@ -156,7 +156,7 @@ public:
      */
     void operator-=(const size_t decrementCount) noexcept
     {
-        for (std::size_t i{}; i < decrementCount; ++i) { myNode = myNode->previous; }
+        for (size_t i{}; i < decrementCount; ++i) { myNode = myNode->previous; }
     }
 
     /**
@@ -344,7 +344,7 @@ public:
      */
     void operator+=(const size_t incrementCount) noexcept
     {
-        for (std::size_t i{}; i < incrementCount; ++i) { myNode = myNode->next; }
+        for (size_t i{}; i < incrementCount; ++i) { myNode = myNode->next; }
     }
 
     /**
@@ -354,7 +354,7 @@ public:
      */
     void operator-=(const size_t decrementCount) noexcept
     {
-        for (std::size_t i{}; i < decrementCount; ++i) { myNode = myNode->previous; }
+        for (size_t i{}; i < decrementCount; ++i) { myNode = myNode->previous; }
     }
 
     /**

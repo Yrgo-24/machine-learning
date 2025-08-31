@@ -13,7 +13,7 @@ namespace container
  * @tparam T The vector type.
  */
 template <typename T>
-class Vector::Iterator final
+class Vector<T>::Iterator final
 {
 public:
     /**
@@ -245,7 +245,7 @@ private:
  * @tparam T The vector type.
  */
 template <typename T>
-class Vector::ConstIterator
+class Vector<T>::ConstIterator
 {
 public:
     /**
