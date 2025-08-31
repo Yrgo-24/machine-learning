@@ -8,3 +8,4 @@ Material från föreläsningar:
 * [2025-09-03](./2025-09-03/README.md) innehåller material gällande arv samt interfaces i C++.
 * [2025-09-05](./2025-09-05/README.md) innehåller information gällande arbete med inlämningsuppgift 3.
 * [2025-09-10](./2025-09-10/README.md) innehåller information om linjär regression och träning för hand.
+* [2025-09-12](./2025-09-12/README.md) innehåller information gällande övergripande struktur för regressionsmodeller i mjukvara.
