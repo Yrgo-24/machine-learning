@@ -9,8 +9,8 @@ The library includes the following drivers:
 * `ADC`: Driver for the `ATmega328P` ADC.  
 * `EEPROM`: Driver for utilization of `ATmega328P` EEPROM.  
 * `GPIO`: Generic driver for GPIO devices.  
+* `Serial`: Driver for serial transmission via UART.
 * `Timer`: Driver for the `ATmega328P` hardware timers.  
-* `Serial`: Driver for serial transmission via USART.  
 * `Watchdog`: Driver for the `ATmega328P` watchdog timer.  
 
 The library includes the following generic smart pointers:
@@ -24,7 +24,9 @@ The library includes the following generic containers:
 * `Pair`: Implementation of pairs containing values of any data type.  
 * `Vector`: Implementation of dynamic vectors of any data type.  
 
-The library also includes miscellaneous utility functions, type traits etc.  
+The library also includes miscellaneous utility functions, type traits etc. 
+
+A test program is implemented.
 
 ## Usage 
 This library must be opened in a Windows environment to build.  
