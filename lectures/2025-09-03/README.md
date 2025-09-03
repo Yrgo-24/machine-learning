@@ -10,6 +10,7 @@
 ## Instruktioner
 * Läs om arv samt interfaces nedan.
 * Se gärna bifogat interface-exempel för lysdioder [här](./driver/README.md).
+* Lektionsanteckningar finns [här](./libatmega/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?

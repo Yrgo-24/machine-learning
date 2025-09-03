@@ -11,7 +11,6 @@
 
 ## Instruktioner
 * Vid behov, läs om materialet gällande arv och interface från föregående lektion [här](../2025-09-03/README.md).
-* Inlämningsuppgift 3 är tillgänglig på Classroom kl. 10:00.
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
