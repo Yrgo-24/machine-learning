@@ -171,11 +171,11 @@ För att hålla koden kompakt används inga kommentarer i detta exempel.
 class TimerInterface
 {
 public:
-    ~TimerInterface() noexcept = default;
-    void start() = 0;
-    void stop() = 0;
-    bool isRunning() const = 0;
-    void reset() = 0;
+    virtual ~TimerInterface() noexcept = default;
+    virtual void start() = 0;
+    virtual void stop() = 0;
+    virtual bool isRunning() const = 0;
+    virtual void reset() = 0;
 };
 ```
 
@@ -249,33 +249,33 @@ public:
     /**
      * @brief Delete the LED.
      */
-    ~LedInterface() noexcept = default;
+    virtual ~LedInterface() noexcept = default;
 
     /**
      * @brief Get the pin the LED is connected to.
      * 
      * @return The pin the LED is connected to.
      */
-    std::uint8_t pin() const = 0;
+    virtual std::uint8_t pin() const = 0;
 
     /**
      * @brief Check whether the LED is enabled.
      * 
      * @return True if the LED is enabled, false otherwise.
      */
-    bool isEnabled() const = 0;
+    virtual bool isEnabled() const = 0;
 
     /**
      * @brief Enable/disable the LED.
      * 
      * @param[in] enable True if the LED is to be enabled, false otherwise.
      */
-    void setEnabled(const bool enable) = 0;
+    virtual void setEnabled(const bool enable) = 0;
 
     /**
      * @brief Toggle the LED.
      */
-    void toggle() noexcept = 0;
+    virtual void toggle() noexcept = 0;
 };
 ```
 
