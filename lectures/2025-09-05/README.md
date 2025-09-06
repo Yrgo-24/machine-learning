@@ -8,6 +8,7 @@
 * Kunna implementera interfaces i C++ för att främja återanvändning och modularitet.
 * Att använda lämpliga C++-nyckelord och dokumentation för att skapa robust och lättförståelig kod.
 * Kunna skapa ett interface för en enkel maskininlärningsalgoritm (ingår i inlämningsuppgiften).
+* Anteckningar finns [här](./notes/README.md).
 
 ## Instruktioner
 * Vid behov, läs om materialet gällande arv och interface från föregående lektion [här](../2025-09-03/README.md).
