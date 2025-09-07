@@ -10,3 +10,4 @@ Material från föreläsningar:
 * [2025-09-10](./2025-09-10/README.md) innehåller information om linjär regression och träning för hand.
 * [2025-09-12](./2025-09-12/README.md) innehåller information gällande övergripande struktur för regressionsmodeller i mjukvara.
 * [2025-09-15](./2025-09-15/README.md) innehåller information gällande träning av linjära regressionsmodeller i mjukvara.
+* [2025-09-17](./2025-09-17/README.md) innehåller information gällande randomisering för linjära regressionsmodeller i mjukvara.
