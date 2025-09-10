@@ -15,3 +15,4 @@ Material från föreläsningar:
 * [2025-09-24](./2025-09-24/README.md) innehåller information gällande arbete med projekt 1 (del II).
 * [2025-09-26](./2025-09-26/README.md) innehåller information gällande arbete med projekt 1 (del III).
 * [2025-09-29](./2025-09-29/README.md) innehåller grundläggande information neurala nätverk.
+* [2025-10-01](./2025-10-01/README.md) innehåller information gällande arbete med inlämningsuppgift 5 (del I).
