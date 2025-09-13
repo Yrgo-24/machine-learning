@@ -18,8 +18,8 @@
 * Genomför gärna övningsuppgiften i underkatalogen [exercises](./exercises/README.md). Lösningsförslag är bifogat.
 
 ## Nästa lektion
-* Implementering av regressionsmodeller i mjukvara (del I) - Övergripande struktur och funktionalitet.
-* Vidare tränings av linjära regressionsmodeller för hand.
+* Implementering av regressionsmodeller i mjukvara (del I) - Träning av modellen.
+* Vidare träning av linjära regressionsmodeller för hand.
 
 ## Introduktion till maskininlärning
 
