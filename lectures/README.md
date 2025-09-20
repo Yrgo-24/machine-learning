@@ -17,3 +17,4 @@ Material från föreläsningar:
 * [2025-09-29](./2025-09-29/README.md) innehåller grundläggande information neurala nätverk.
 * [2025-10-01](./2025-10-01/README.md) innehåller information gällande arbete med inlämningsuppgift 5 (del I).
 * [2025-10-03](./2025-10-03/README.md) innehåller information gällande arbete med inlämningsuppgift 5 (del II).
+* [2025-10-08](./2025-10-08/README.md) innehåller information gällande implementering av dense-lager (del I).
