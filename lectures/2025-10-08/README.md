@@ -13,6 +13,7 @@
 * Använd er inlämnade programkod för inlämningsuppgift 5.
 * Skapa en konkret implementation som ärver `ml::dense_layer::Interface`, se bilaga A nedan för mer detaljer.
 * Implementera samtliga metoder förutom de ovannämnda - returnera enbart `true` i dessa.
+* Lektionsanteckningar finns [här](./notes/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
