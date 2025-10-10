@@ -1,4 +1,4 @@
-# 2025-10-09 - Anteckningar
+# 2025-10-08 - Anteckningar
 
 Implementering av klassen `DenseLayer` - en skarp implementation av dense-lager.
 * Filen [ml/types.h](./ml/types.h) innehåller typedefinitioner för maskininlärning, i detta fall enbart aktiveringsfunktioner.
