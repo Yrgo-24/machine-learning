@@ -28,6 +28,21 @@
 
 **1.** I filen `source/dense_layer/dense_layer.cpp`, skapa en anonym namnrymd. I denna namnrymd, definiera
 följande hjälpfunktioner:
+* `initRandom`: Funktion för att initiera slumptalsgeneratorn en gång.
+    * **Implementation:**
+        * Lägg till en statisk lokal variabel döpt `initialized` med initialvärde `false`. Eftersom variabeln är statisk 
+        behåller den sitt värde mellan funktionsanrop, vilket gör att vi bara initierar slumptalsgeneratorn en gång.
+            * Om `initialized == true`, terminera funktionen tidigt (med `return`).
+            * Initiera slumptalsgeneratorn med aktuell tid genom att anropa `std::srand(std::time(nullptr))`. För att åstadkomma detta, inkludera `<cstdlib>` samt `<ctime>`.
+            * Efter initieringen, sätt `initialized = true` så att initiering inte sker nästa gång funktionen anropas.
+
+* `randomStartVal`: Funktion för att generera ett slumptal mellan 0.0 samt 1.0.
+    * **Returvärde:** 
+        * Det genererade slumptalet.
+    * **Implementation:**
+        * Generera ett slumptal inom intervallet (0.0, 1.0) genom att kalla på `std::rand()`, som genererar
+        ett slumptal mellan (0, RAND_MAX), och dividera med RAND_MAX. En av operatorerna måste omvandlas
+        till ett flyttal för att inte heltalsdivision ska ske, exempelvis `static_cast<double>(RAND_MAX)`.
 
 * `actFuncOutput`: Funktion för att beräkna utdata ur en given aktiveringsfunktion.
     * **Parametrar:**
@@ -39,7 +54,7 @@ följande hjälpfunktioner:
         * Använd en switch-sats för att beräkna utdatan beroende på angiven aktiveringsfunktion:
             * `ActFunc::Relu`: Returnera `input` om `input > 0.0`, annars `0.0`.
             * `ActFunc::Tanh`: Returnera `std::tanh(input)` (kräver `#include <cmath>`).
-            * Default-fall: Kasta ett undantag av typ `std::invalid_argument` med meddelandet `"Invalid activation function!"`.
+            * Default-fall: Skriv ut felmeddelandet `"Invalid activation function!"` och returnera `0.0`.
 
 * `actFuncDelta`: Funktion för att beräkna derivatan av en given aktiveringsfunktion.
     * **Parametrar:**
@@ -51,9 +66,18 @@ följande hjälpfunktioner:
         * Använd en switch-sats för att beräkna derivatan beroende på angiven aktiveringsfunktion:
             * `ActFunc::Relu`: Returnera `1.0` om `input > 0.0`, annars `0.0`.
             * `ActFunc::Tanh`: Beräkna `const auto tanhOutput = std::tanh(input)` och returnera `1.0 - tanhOutput * tanhOutput`.
-            * Default-fall: Kasta ett undantag av typ `std::invalid_argument` med meddelandet `"Invalid activation function!"`.
+            * Default-fall: Skriv ut felmeddelandet `"Invalid activation function!"` och returnera `0.0`.
 
-**2.** Implementera funktionen `feedforward`:
+**2.** Randomisera samtliga biasvärden och vikter:
+* I konstruktorn, anropa först `initRandom` för att initiera slumptalsgeneratorn.
+* Iterera genom samtliga noder i lagret med en for-loop: `for (std::size_t i{}; i < nodeCount; ++i)`.
+* För varje nod `i`:
+    * Tilldela ett slumptal till dess biasvärde genom att anropa `randomStartVal`: `myBias[i] = randomStartVal()`.
+    * Iterera genom nodens vikter med en nästlad for-loop: `for (std::size_t j{}; j < weightCount; ++j)`.
+    * För varje vikt `j`:
+        * Tilldela ett slumptal till vikten genom att anropa `randomStartVal`: `myWeights[i][j] = randomStartVal()`.
+
+**3.** Implementera funktionen `feedforward`:
 
 **Indatakontroll:**
 * Kontrollera att dimensionerna på given input matchar antalet vikter per nod i lagret (`input.size() == weightCount()`).
@@ -69,7 +93,7 @@ följande hjälpfunktioner:
 
 **Returvärde:** `true` vid lyckad feedforward.
 
-**3.** Implementera funktionen `backpropagate` för utgångslager (med referensvärden):
+**4.** Implementera funktionen `backpropagate` för utgångslager (med referensvärden):
 
 **Indatakontroll:**
 * Kontrollera att dimensionerna på referensvektorns storlek matchar antalet noder (`reference.size() == nodeCount()`).
@@ -83,7 +107,7 @@ följande hjälpfunktioner:
 
 **Returvärde:** `true` vid lyckad backpropagation.
 
-**4.** Implementera funktionen `backpropagate` för dolda lager (med fel och vikter från nästa lager):
+**5.** Implementera funktionen `backpropagate` för dolda lager (med fel och vikter från nästa lager):
 
 **Indatakontroll:**
 * Kontrollera att nästa lagers viktantal matchar detta lagers nodantal (`nextLayer.weightCount() == nodeCount()`).
@@ -99,7 +123,7 @@ följande hjälpfunktioner:
 
 **Returvärde:** `true` vid lyckad backpropagation.
 
-**5.** Implementera funktionen `optimize`:
+**6.** Implementera funktionen `optimize`:
 
 **Indatakontroll:**
 * Kontrollera att lärhastigheten är giltig (`learningRate > 0.0`).
