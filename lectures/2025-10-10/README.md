@@ -7,6 +7,7 @@
 * Ha implementerat metoderna `feedforward`, `backpropagate` och `optimize` i dense-lager-klassen.
 * Ha skapat en fullt fungerande dense-lager-implementation.
 * Ha testat implementationen med ett komplett neuralt nätverk (det som skapades i inlämningsuppgift 5).
+* Lektionsanteckningar finns [här](./notes/README.md).
 
 ## Instruktioner
 * Fortsätt där vi arbetade senast - implementera de tre metoderna som lämnades tomma förra lektionen.
