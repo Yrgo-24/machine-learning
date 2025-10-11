@@ -10,8 +10,11 @@
 # Don't ignore license files.
 !LICENSE
 
-# Ignore .txt files:
+# Ignore .txt files.
 *.txt
+
+# Ignore solution files.
+*atsln
 
 # Ignore CMake files other than CMakeLists.txt.
 *CMakeCache.txt
@@ -24,3 +27,7 @@
 
 # Ignore vscode directory.
 *vscode/
+*vs/
+
+# Ignore debug folder.
+*Debug/
