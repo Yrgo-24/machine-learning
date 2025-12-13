@@ -20,3 +20,4 @@ Material från föreläsningar:
 * [L17](./L17/README.md) innehåller information om dense-lager (del I).
 * [L18](./L18/README.md) innehåller information om dense-lager (del II).
 * [L19](./L19/README.md) innehåller information om projekt 2 (del I).
+* [L20](./L20/README.md) innehåller information om projekt 2 (del II).
