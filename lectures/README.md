@@ -22,3 +22,4 @@ Material från föreläsningar:
 * [L19](./L19/README.md) innehåller information om projekt 2 (del I).
 * [L20](./L20/README.md) innehåller information om projekt 2 (del II).
 * [L21](./L21/README.md) innehåller information om projekt 2 (del III).
+* [L22](./L22/README.md) innehåller information om projekt 2 (del IV).
