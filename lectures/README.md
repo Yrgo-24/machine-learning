@@ -24,3 +24,5 @@ Material från föreläsningar:
 * [L21](./L21/README.md) innehåller information om projekt 2 (del III).
 * [L22](./L22/README.md) innehåller information om projekt 2 (del IV).
 * [L23](./L23/README.md) innehåller information om konvolutionella neurala nätverk (del I).
+* [L24](./L24/README.md) innehåller information om konvolutionella neurala nätverk (del II).
+* [L25](./L25/README.md) innehåller information om konvolutionella neurala nätverk (del III).

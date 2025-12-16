@@ -207,7 +207,7 @@ def main() -> None:
         [1, 1, 1, 1],
         [1, 0, 0, 1],
         [1, 0, 0, 1],
-        [1, 1, 1, 1]
+        [1, 1, 1, 1],
     ]
 
     # Example output gradients (same shape as output, used for backpropagation demo).
@@ -215,7 +215,7 @@ def main() -> None:
         [1, 1, 1, 1],
         [1, 1, 1, 1],
         [1, 1, 1, 1],
-        [1, 1, 1, 1]
+        [1, 1, 1, 1],
     ]
 
     # Create a convolutional layer: 4x4 input, 2x2 kernel.

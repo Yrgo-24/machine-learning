@@ -88,6 +88,7 @@ void printMatrix(const Matrix2d& matrix, const std::size_t precision = 1U,
         }
         ostream << "\n";
     }
+    ostream << "\n";
 }
 
 /**
@@ -128,10 +129,6 @@ int main()
 //        implementation is finished.
 #ifdef CONV_LAYER_IMPLEMENTED
 
-    // Input and kernel sizes.
-    constexpr std::size_t inputSize{4U};
-    constexpr std::size_t kernelSize{2U};
-
     // Example 4x4 input matrix (could represent an image or feature map).
     const Matrix2d input{{1, 1, 1, 1},
                          {1, 0, 0, 1},
@@ -148,6 +145,8 @@ int main()
     std::srand(std::time(nullptr));
 
     // Create a convolutional layer: 4x4 input, 2x2 kernel.
+    constexpr std::size_t inputSize{4U};
+    constexpr std::size_t kernelSize{2U};
     ml::ConvLayer convLayer(inputSize, kernelSize);
     
     // Show the input matrix.
@@ -156,21 +155,20 @@ int main()
 
     // Perform feedforward (convolution).
     convLayer.feedforward(input);
-    std::cout << "\nConvolution output (2D):\n";
+    std::cout << "Convolution output (2D):\n";
     printMatrix(convLayer.output);
 
     // Show the output gradients.
-    std::cout << "\nConvolution output gradients (2D):\n";
+    std::cout << "Convolution output gradients (2D):\n";
     printMatrix(outputGradients);
 
     // Perform backpropagation.
     convLayer.backpropagate(outputGradients);
-    std::cout << "\nInput gradients after backpropagation (2D):\n";
+    std::cout << "Input gradients after backpropagation (2D):\n";
     printMatrix(convLayer.inputGradients);
     return 0;
     
 //! @todo Remove this header guard (and/or uncomment the compiler flags in the makefile) once the
 //        implementation is finished.
 #endif /** CONV_LAYER_IMPLEMENTED */
-
 }
