@@ -11,12 +11,14 @@
 ## Instruktioner
 * Se [bilaga A](#bilaga-a---träning-av-ett-litet-konvolutionellt-neuralt-nätverk) nedan för information om
 träning av konvolutionella neurala nätverk.
+* För arbete med `Inlämningsuppgift 6`, kolla gärna följande enkla conv-lager-implementation skriven i [Python](../L25/conv_layer/python/conv_demo.py).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
 
 ## Nästa lektion
 * Implementation av conv-lager i mjukvara.
+* Arbete med `Inlämningsuppgift 6 - Konvolutionellt neuralt nätverk.`
 
 ## Bilaga A - Träning av ett litet konvolutionellt neuralt nätverk
 
