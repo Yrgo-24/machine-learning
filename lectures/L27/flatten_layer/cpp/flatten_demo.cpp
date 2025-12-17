@@ -136,6 +136,7 @@ void printMatrix(const Matrix2d& matrix, const std::size_t precision = 1U,
         }
         ostream << "\n";
     }
+    ostream << "\n";
 }
 } // namespace 
 
@@ -149,35 +150,31 @@ int main()
 //! @todo Remove this header guard (and/or uncomment the compiler flags in the makefile) once the
 //        implementation is finished.
 #ifdef FLATTEN_LAYER_IMPLEMENTED
-
-    constexpr std::size_t inputSize{4U};
-    constexpr std::size_t outputSize{inputSize * inputSize};
-    constexpr double gradientVal{1.0};
-
     // Example 4x4 input matrix (could represent an image or feature map).
-    const Matrix2d input{{1, 1, 1, 1},
-                         {1, 0, 0, 1},
-                         {1, 0, 0, 1},
-                         {1, 1, 1, 1}};
+    const Matrix2d input{{2, 1, 6, 1},
+                         {3, 0, 4, 6},
+                         {1, 2, 4, 5},
+                         {3, 4, 7, 7}};
 
     // Example output gradients (same shape as flattened output, used for backpropagation demo).
-    const Matrix1d outputGradients(outputSize, gradientVal);
+    const Matrix1d outputGradients{1, 2, 3, 4, 8, 7, 6, 5, 0, 2, 4, 8, 9, 7, 5, 3};
 
     // Create a flatten layer: 4x4 input, produces 1x16 output.
+    constexpr std::size_t inputSize{4U};
     FlattenLayer flattenLayer{inputSize};
 
-    // Perform feedforward, print the result (one decimal per value).
+    // Perform feedforward (flatten the input), print the result.
     std::cout << "Flattening input data (2D -> 1D):\n";
     printMatrix(input);
     flattenLayer.feedforward(input);
-    std::cout << "\nResulting flattened output (1D):\n";
+    std::cout << "Resulting flattened output (1D):\n";
     printMatrix(flattenLayer.output);
 
-    // Perform backpropagation, print the result (one decimal per value).
-    std::cout << "\nApplying backpropagation (1D -> 2D):\n";
+    // Perform backpropagation (unflatten the output), print the result.
+    std::cout << "Applying backpropagation (1D -> 2D):\n";
     printMatrix(outputGradients);
     flattenLayer.backpropagate(outputGradients);
-    std::cout << "\nResulting unflattened input gradients (2D):\n";
+    std::cout << "Resulting unflattened input gradients (2D):\n";
     printMatrix(flattenLayer.inputGradients);
     return 0;
 

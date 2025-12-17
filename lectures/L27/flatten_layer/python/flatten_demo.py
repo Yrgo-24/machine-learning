@@ -113,19 +113,19 @@ def main() -> None:
 
     # Example 4x4 input matrix (could represent an image or feature map).
     input_data = [
-        [1, 1, 1, 1],
-        [1, 0, 0, 1],
-        [1, 0, 0, 1],
-        [1, 1, 1, 1]
+        [2, 1, 6, 1],
+        [3, 0, 4, 6],
+        [1, 2, 4, 5],
+        [3, 4, 7, 7],
     ]
 
     # Example output gradients (same shape as flattened output, used for backpropagation demo).
-    output_gradients = [1.0] * 16
+    output_gradients = [1, 2, 3, 4, 8, 7, 6, 5, 0, 2, 4, 8, 9, 7, 5, 3]
 
     # Create a flatten layer: 4x4 input, produces 1x16 output.
     flatten_layer = FlattenLayer(4)
 
-    # Perform feedforward, print the result (one decimal per value).
+    # Perform feedforward (flatten the input), print the result.
     print("Flattening input_data (2D -> 1D):")
     for row in input_data:
         print("  ", " ".join(f"{num:.1f}" for num in row))
@@ -134,7 +134,7 @@ def main() -> None:
     print("\nResulting flattened output (1D):")
     print("  ", " ".join(f"{num:.1f}" for num in flatten_layer.output))
 
-    # Perform backpropagation, print the result (one decimal per value).
+    # Perform backpropagation (unflatten the output gradients), print the result.
     print("\nApplying backpropagation (1D -> 2D):")
     print("  Output gradients:", " ".join(f"{num:.1f}" for num in output_gradients))
 
