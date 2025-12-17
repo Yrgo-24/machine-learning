@@ -1,5 +1,5 @@
 /**
- * @brief Simple max pooling layer example.
+ * @brief Simple max pooling layer demo.
  */
 #include <iomanip>
 #include <iostream>
@@ -87,6 +87,7 @@ void printMatrix(const Matrix2d& matrix, const std::size_t precision = 1U,
         }
         ostream << "\n";
     }
+    ostream << "\n";
 }
 } // namespace 
 
@@ -102,14 +103,14 @@ int main()
 #ifdef MAX_POOL_LAYER_IMPLEMENTED
     
     // Example 4x4 input matrix (could represent an image or feature map).
-    const Matrix2d input{{1, 1, 1, 1},
-                         {1, 0, 0, 1},
-                         {1, 0, 0, 1},
-                         {1, 1, 1, 1}};
-    
+    const Matrix2d input{{2, 1, 6, 1},
+                         {3, 0, 4, 6},
+                         {1, 2, 4, 5},
+                         {3, 4, 7, 7}};
+        
     // Example output gradients (same shape as pooling output, used for backpropagation demo).
-    const Matrix2d outputGradients{{1, 1},
-                                   {1, 1}};
+    const Matrix2d outputGradients{{1, 2},
+                                   {3, 4}};
 
     // Create a max pooling layer: 4x4 input, 2x2 pooling regions, produces 2x2 output.
     constexpr std::size_t inputSize{4U};
@@ -122,16 +123,16 @@ int main()
 
     // Perform feedforward (pooling).
     poolLayer.feedforward(input);
-    std::cout << "\nPooled output (2D):\n";
+    std::cout << "Pooled output (2D):\n";
     printMatrix(poolLayer.output);
 
     // Show the output gradients.
-    std::cout << "\nPooling output gradients (2D):\n";
+    std::cout << "Pooling output gradients (2D):\n";
     printMatrix(outputGradients);
 
     // Perform backpropagation.
     poolLayer.backpropagate(outputGradients);
-    std::cout << "\nInput gradients after backpropagation (2D):\n";
+    std::cout << "Input gradients after backpropagation (2D):\n";
     printMatrix(poolLayer.inputGradients);
     return 0;
 

@@ -121,20 +121,21 @@ class MaxPoolLayer:
         # Perform backpropagation - feed back the gradient to the max values.
         for i in range(len(self.output)):
             for j in range(len(self.output)):
-                max_row = i * pool_size
-                max_col = j * pool_size
+                row = i * pool_size
+                col = j * pool_size
+
                 max_val = self.output[i][j]
+                max_row = row
+                max_col = col
 
                 # Find the first position of the max value in the input.
                 found = False
                 for pi in range(pool_size):
                     for pj in range(pool_size):
-                        row = pi + max_row
-                        col = pj + max_col
-                        val = self.input[row][col]
+                        val = self.input[row + pi][col + pj]
                         if val == max_val:
-                            max_row = row
-                            max_col = col
+                            max_row = row + pi
+                            max_col = col + pj
                             found = True
                     if found:
                         break
@@ -148,16 +149,16 @@ def main() -> None:
 
     # Example 4x4 input matrix (could represent an image or feature map).
     input_data = [
-        [1, 1, 1, 1],
-        [1, 0, 0, 1],
-        [1, 0, 0, 1],
-        [1, 1, 1, 1]
+        [2, 1, 6, 1],
+        [3, 0, 4, 6],
+        [1, 2, 4, 5],
+        [3, 4, 7, 7],
     ]
 
     # Example output gradients (same shape as pooling output, used for backpropagation demo).
     output_gradients = [
-        [1, 1],
-        [1, 1]
+        [1, 2],
+        [3, 4],
     ]
 
     # Create a max pooling layer: 4x4 input, 2x2 pooling regions, produces 2x2 output.

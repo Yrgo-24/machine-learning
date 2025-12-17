@@ -26,3 +26,4 @@ Material från föreläsningar:
 * [L23](./L23/README.md) innehåller information om konvolutionella neurala nätverk (del I).
 * [L24](./L24/README.md) innehåller information om konvolutionella neurala nätverk (del II).
 * [L25](./L25/README.md) innehåller information om konvolutionella neurala nätverk (del III).
+* [L26](./L26/README.md) innehåller information om konvolutionella neurala nätverk (del IV).

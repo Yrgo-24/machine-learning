@@ -9,14 +9,14 @@ SOURCE_FILES := max_pool_demo.cpp \
 
 # Compiler flags.
 # TODO: Uncomment this line once the implementation is finished.
-#COMPILER_FLAGS := -std=c++17 -Wall -Werror -DMAX_POOL_LAYER_IMPLEMENTED
+#CXX_FLAGS := -std=c++17 -Wall -Werror -DMAX_POOL_LAYER_IMPLEMENTED
 
 # Build and run the application as default.
 default: build run
 
 # Build the application.
 build:
-	@$(CXX_COMPILER) $(SOURCE_FILES) -o $(TARGET) $(COMPILER_FLAGS)
+	@$(CXX_COMPILER) $(SOURCE_FILES) -o $(TARGET) $(CXX_FLAGS)
 
 # Run the application.
 run:
