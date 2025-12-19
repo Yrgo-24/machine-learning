@@ -1,6 +1,6 @@
 # Maskininlärning - Ela24
 
-Repo för kursen Maskininlärning med klassen Ela24, vt25 - ht26.
+Repo för kursen Maskininlärning med klassen Ela24, ht25 - vt26.
 
 Lektionsplaneringar samt lektionsanteckningar finns i katalogen [lectures](./lectures/README.md).
 
