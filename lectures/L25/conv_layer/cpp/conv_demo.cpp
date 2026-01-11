@@ -147,7 +147,7 @@ int main()
     // Create a convolutional layer: 4x4 input, 2x2 kernel.
     constexpr std::size_t inputSize{4U};
     constexpr std::size_t kernelSize{2U};
-    ml::ConvLayer convLayer(inputSize, kernelSize);
+    ml::ConvLayer convLayer{inputSize, kernelSize};
     
     // Show the input matrix.
     std::cout << "Convolution input data (2D):\n";
