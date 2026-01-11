@@ -5,6 +5,7 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 namespace
@@ -114,8 +115,60 @@ constexpr double reluOutput(const double input) noexcept { return 0.0 < input ? 
  */
 constexpr double reluDelta(const double input) noexcept { return 0.0 < input ? 1.0 : 0.0; }
 
-//! @todo Create convolutional layer structure here!
+namespace ml
+{
+/**
+ * @brief Convolutional layer structure.
+ * 
+ * @todo Implement this structure!
+ */
+struct ConvLayer final
+{
+     /**
+     * @brief Constructor.
+     * 
+     * @param[in] inputSize Input size. Must be greater than 0.
+     * @param[in] kernelSize Kernel size. Must be greater than 0 and smaller than the input size.
+     */
 
+    /**
+     * @brief Perform feedforward operation.
+     * 
+     * @param[in] input Matrix holding input data.
+     * 
+     * @return True on success, false on failure.
+     */
+
+    /**
+     * @brief Perform backpropagation.
+     * 
+     * @param[in] outputGradients Matrix holding gradients from the next layer.
+     * 
+     * @return True on success, false on failure.
+     */
+
+    /**
+     * @brief Perform optimization.
+     * 
+     * @param[in] learningRate Learning rate to use. Must be in range (0.0, 1.0].
+     * 
+     * @return True on success, false on failure.
+     */
+
+    /** @todo Define member variables here! Keep them public and skip the 'my' prefix. */
+
+private:
+    /**
+     * @brief Pad input with zeros.
+     * 
+     * @param[in] input Input data.
+     */
+
+    /**
+     * @brief Extract input gradients.
+     */
+};
+} // namespace ml
 } // namespace
 
 /**

@@ -138,6 +138,41 @@ void printMatrix(const Matrix2d& matrix, const std::size_t precision = 1U,
     }
     ostream << "\n";
 }
+
+namespace ml
+{
+/**
+ * @brief Flatten layer structure.
+ * 
+ * @todo Implement this structure!
+ */
+struct FlattenLayer final
+{
+    /**
+     * @brief Constructor.
+     * 
+     * @param[in] inputSize Input size. Must be greater than 0.
+     */
+
+    /**
+     * @brief Flatten the input from 2D to 1D.
+     * 
+     * @param[in] input Matrix holding input data.
+     * 
+     * @return True on success, false on failure.
+     */
+
+     /**
+     * @brief Unflatten the output gradients from 1D to 2D.
+     * 
+     * @param[in] outputGradients Matrix holding output gradients.
+     * 
+     * @return True on success, false on failure.
+     */
+
+    /** @todo Define member variables here! Keep them public and skip the 'my' prefix. */
+};
+} // namespace ml
 } // namespace 
 
 /**

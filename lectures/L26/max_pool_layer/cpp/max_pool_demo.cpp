@@ -89,6 +89,42 @@ void printMatrix(const Matrix2d& matrix, const std::size_t precision = 1U,
     }
     ostream << "\n";
 }
+
+namespace ml
+{
+/**
+ * @brief Max pooling layer structure.
+ * 
+ * @todo Implement this structure!
+ */
+struct MaxPool final
+{
+    /**
+     * @brief Constructor.
+     * 
+     * @param[in] inputSize Input size. Must be greater than 0.
+     * @param[in] poolSize Pool size. Must divide the input size.
+     */
+
+    /**
+     * @brief Perform feedforward operation.
+     * 
+     * @param[in] input Matrix holding input data.
+     * 
+     * @return True on success, false on failure.
+     */
+
+    /**
+     * @brief Perform backpropagation.
+     * 
+     * @param[in] outputGradients Matrix holding gradients from the next layer.
+     * 
+     * @return True on success, false on failure.
+     */
+
+    /** @todo Define member variables here! Keep them public and skip the 'my' prefix. */
+};
+} // namespace ml
 } // namespace 
 
 /**

@@ -46,7 +46,7 @@ Därmed ska följande kod fungera för att skapa och använda ett conv-lager dö
 // Create a convolutional layer: 4x4 input, 2x2 kernel.
 constexpr std::size_t inputSize{4U};
 constexpr std::size_t kernelSize{2U};
-ml::ConvLayer convLayer(inputSize, kernelSize);
+ml::ConvLayer convLayer{inputSize, kernelSize};
 
 // Example 4x4 input matrix (could represent an image or feature map).
 const Matrix2d input{{1, 1, 1, 1},
