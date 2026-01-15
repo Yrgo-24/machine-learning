@@ -111,7 +111,7 @@ Konvolutionella neurala nätverk är därför nödvändiga för att effektivt ku
 
 Ett typiskt CNN består av ett flertal lager:
 
-1. **Konvolutionella lager** (hädanefter kallade *Conv-lager*) används för att identifiera och extrahera lokala mönster och egenskaper i en bild.
+1. **Konvolutionella lager** (hädanefter kallade *conv-lager*) används för att identifiera och extrahera lokala mönster och egenskaper i en bild.
 2. **Pooling-lager** används för att sampla ned bilden, vilket minskar dess storlek samtidigt som de viktigaste mönstren bevaras.
 3. **Flatten-lager** omvandlar (plattar) den tvådimensionella bilden till en endimensionell representation som kan användas av vanliga neurala nätverk.
 4. **Dense-lager** används slutligen för att, baserat på dessa egenskaper, göra en prediktion av vad bilden föreställer.
@@ -120,9 +120,9 @@ De tre första lagren används för att extrahera attribut ur bilden. Dense-lagr
 
 ---
 
-### Konvolutionella lager (Conv-lager)
+### Konvolutionella lager (conv-lager)
 
-#### Vad gör ett Conv-lager?
+#### Vad gör ett conv-lager?
 
 Ett konvolutionellt lager applicerar en *kernel* (ett litet filter med vikter) över inputbilden.
 Samma kernel används över hela bilden, vilket innebär att:
@@ -131,10 +131,12 @@ Samma kernel används över hela bilden, vilket innebär att:
 * samma mönster kan kännas igen oavsett position.
 
 Varje kernel letar efter ett specifikt lokalt mönster, till exempel kanter, hörn eller linjer.
+Ett conv-lager kan därför innehålla multipla kernels för att leta efter flera mönster samtidigt.
+För att hålla det enkelt kommer vi bara använda en kernel per conv-lager i denna kurs.
 
 #### Viktiga egenskaper
 
-* **Lokalt receptivt fält**: Varje nod ser bara en liten del av indatan.
+* **Lokalt receptivt fält**: Varje nod i utdatan ser bara en liten del av indatan.
 * **Viktdelning**: Samma vikter används över hela bilden.
 * **Aktiveringsfunktion (ReLU)**: Negativa svar ignoreras, positiva förs vidare.
 
@@ -148,7 +150,7 @@ men med två viktiga skillnader:
 
 ---
 
-#### Feedforward i ett Conv-lager
+#### Feedforward i ett conv-lager
 
 Vid feedforward glider kerneln över inputbilden ett steg i taget, oftast med `stride = 1`
 (kerneln flyttas ett pixelsteg i taget över bilden).
@@ -163,26 +165,26 @@ Resultatet blir att varje position i outputen motsvarar hur starkt kerneln aktiv
 
 ---
 
-#### Backpropagation i ett Conv-lager
+#### Backpropagation i ett conv-lager
 
 Vid backpropagation sprids felet från outputen tillbaka genom lagret för att beräkna så kallade *gradienter*,
-som indikerar hur mycket och åt vilket håll en vikt ska ändras för att aktuellt fel ska minska.
+som indikerar hur mycket och åt vilket håll en vikt/bias-värdet ska ändras för att aktuellt fel ska minska.
 
 För varje position i outputen gäller att:
-1. Gradient från nästa lager kombineras med derivatan av aktiveringsfunktionen (på samma sätt som 
+1. En gradient från nästa lager kombineras med derivatan av aktiveringsfunktionen (på samma sätt som 
 "fel" tidigare har beräknats för dense-lager i denna kurs).
 2. Denna gradient används för att vid optimering uppdatera kernelns gradienter, bias-gradienter samt sprida felet 
-tillbaka till rätt positioner i inputen (för att optimiera eventuella föregående lager).
+tillbaka till rätt positioner i inputen (för att optimera föregående lager).
 
 Eftersom samma kernel används över hela bilden:
 - ackumuleras gradienter från alla positioner där kerneln applicerats,
 - varje kernel-vikt påverkas av många olika delar av bilden.
 
-Backpropagation i ett Conv-lager beräknar därmed hur mycket varje kernel-vikt har bidragit till det totala felet.
+Backpropagation i ett conv-lager beräknar därmed hur mycket varje kernel-vikt har bidragit till det totala felet.
 
 ---
 
-#### Optimering i ett Conv-lager
+#### Optimering i ett conv-lager
 
 Efter att gradienterna har beräknats så uppdateras parametrarna i lagret.
 
@@ -196,12 +198,12 @@ ett conv-lager bara består av en liten kernel med vikter samt ett bias-värde.
 
 #### Sammanfattning
 
-I ett Conv-lager:
+I ett conv-lager:
 - feedforward applicerar samma kernel lokalt över hela bilden,
 - backpropagation samlar information från alla positioner där kerneln användes,
 - optimering justerar kernelns vikter och bias så att de bättre fångar relevanta mönster nästa gång.
 
-Trots att implementationen kan se mer avancerad ut än ett dense-lager bygger Conv-lager på exakt samma grundprinciper.
+Trots att implementationen kan se mer avancerad ut än ett dense-lager bygger conv-lager på exakt samma grundprinciper.
 
 ---
 
@@ -270,7 +272,7 @@ Dense-lagret används för att:
 Det mentala flödet är ett sätt att förstå vad varje lager försöker avgöra, snarare än hur det räknar.
 
 Anta att vi har följande CNN:
-* Ett Conv-lager, som bearbetar 4×4-bilder med en 2×2-kernel.
+* Ett conv-lager, som bearbetar 4×4-bilder med en 2×2-kernel.
 * Ett 2×2 maxpooling-lager, som samplar ned bilden till 2×2.
 * Ett flatten-lager, som plattar bilden till en dimension (2×2 till 1×4).
 * Ett dense-lager bestående av en nod och fyra vikter, som predikterar innehållet på inputbilden.
@@ -350,7 +352,7 @@ Backpropagation följer alltså samma princip som feedforward, fast baklänges.
 
 ### Sammanfattning
 
-* Conv-lager letar efter lokala mönster.
+* conv-lager letar efter lokala mönster.
 * Maxpooling-lagret behåller de mest framträdande attributen och förkastar övriga.
 * Flatten-lagret omvandlar extraherad data till en dimension.
 * Dense-lagret gör den slutliga tolkningen.
