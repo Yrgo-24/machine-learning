@@ -99,7 +99,7 @@ För varje position i bilden beräknas summan av elementvis multiplikation mella
 
 
 ```
-sum = a·k00 + b·k01 + c·k10 + d·k11 + bias
+sum = a * k00 + b * k01 + c * k10 + d * k11 + bias
 output = ReLU(sum)
 ```
 
@@ -305,7 +305,7 @@ biasGradient = 0 + 10 + 20 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 30 + 0 + 40
 
 **Kernel-gradienter:**
 
-För varje element i kernel summerar vi produkten av varje patch i den paddade inputbilden och motsvarande värde i gradientmatrisen. Här är alla steg:
+För varje element i kernel summerar vi produkten av varje patch i den paddade inputbilden och motsvarande värde i gradientmatrisen. Tricket är att utnyttja att nästan alla gradienter är noll och endast räkna på de positioner där gradienten är icke-noll.
 
 Vi använder den paddade inputbilden (6x6):
 
@@ -327,98 +327,63 @@ och gradientmatrisen från pooling-lagret (4x4):
 0 30  0 40
 ```
 
-För varje position (i, j) i gradientmatrisen, extraheras en 2x2-patch ur inputbilden. Varje kernel-element multipliceras med motsvarande värde i patchen och summeras över alla positioner.
+För varje position (i, j) i gradientmatrisen extraheras en 2x2-patch ur inputbilden. Varje kernel-element multipliceras med motsvarande värde i patchen och summeras över alla positioner.
 
-Vi visar nu alla multiplikationer och summeringar för varje kernel-element:
+Beräkningarna för varje kernel-element visas nedan:
 
 **För k00** (övre vänstra kernel-vikten):
 
 ```math
-k00 = 0\cdot0 + 0\cdot10 + 0\cdot20 + 0\cdot0 \\
-\quad + 0\cdot0 + 1\cdot10 + 1\cdot20 + 1\cdot0 \\
-\quad + 0\cdot0 + 1\cdot0 + 0\cdot0 + 0\cdot0 \\
-\quad + 0\cdot0 + 1\cdot30 + 1\cdot0 + 1\cdot40,
-```
-
-vilket kan förenklas till
-
-```math
-k00 = 0 + 0 + 0 + 0 + 0 + 10 + 20 + 0 + 0 + 0 + 0 + 0 + 0 + 30 + 0 + 40 = 100
+k00 = 0\cdot10 + 0\cdot20 + 1\cdot30 + 0\cdot40 = 30
 ```
 
 **För k01** (övre högra kernel-vikten):
 
 ```math
-k01 = 0\cdot0 + 0\cdot10 + 0\cdot20 + 0\cdot0 \\
-\quad + 1\cdot0 + 1\cdot10 + 1\cdot20 + 0\cdot0 \\
-\quad + 1\cdot0 + 0\cdot0 + 0\cdot0 + 1\cdot0 \\
-\quad + 1\cdot0 + 1\cdot30 + 1\cdot0 + 0\cdot40,
-```
-
-vilket kan förenklas till
-
-```math
-k01 = 0 + 0 + 0 + 0 + 0 + 10 + 20 + 0 + 0 + 0 + 0 + 0 + 0 + 30 + 0 + 0 = 60
+k01 = 0\cdot10 + 0\cdot20 + 0\cdot30 + 1\cdot40 = 40
 ```
 
 **För k10** (nedre vänstra kernel-vikten):
 
 ```math
-k10 = 0\cdot0 + 1\cdot10 + 1\cdot20 + 1\cdot0 \\
-\quad + 0\cdot0 + 1\cdot0 + 0\cdot0 + 0\cdot0 \\
-\quad + 0\cdot0 + 1\cdot30 + 1\cdot0 + 1\cdot40 \\
-\quad + 0\cdot0 + 0\cdot0 + 0\cdot0 + 0\cdot0,
-```
-
-vilket kan förenklas till
-
-```math
-k10 = 0 + 10 + 20 + 0 + 0 + 0 + 0 + 0 + 0 + 30 + 0 + 40 + 0 + 0 + 0 + 0 = 100
+k10 = 1\cdot10 + 1\cdot20 + 1\cdot30 + 1\cdot40 = 100
 ```
 
 **För k11** (nedre högra kernel-vikten):
 
 ```math
-k11 = 1\cdot0 + 1\cdot10 + 0\cdot20 + 1\cdot0 \\
-\quad + 1\cdot0 + 0\cdot10 + 0\cdot20 + 1\cdot0 \\
-\quad + 1\cdot0 + 1\cdot0 + 1\cdot0 + 0\cdot0 \\
-\quad + 1\cdot0 + 1\cdot30 + 1\cdot0 + 0\cdot40,
-```
-
-vilket kan förenklas till
-
-```math
-k11 = 0 + 10 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 30 + 0 + 0 = 40
+k11 = 1\cdot10 + 1\cdot20 + 1\cdot30 + 1\cdot40 = 100
 ```
 
 Därmed erhålls följande kernel-gradienter:
 
 ```
-k00 = 100
-k01 = 60
+k00 = 30
+k01 = 40
 k10 = 100
-k11 = 40,
+k11 = 100
 ```
 
 vilket kan skrivas om till en matris:
 
 ```
-100 60
-100 40
+30 40
+100 100
 ```
 
 ---
 
 **Input-gradienter (paddad input):**
 
-Nu beräknar vi hur felet sprids bakåt till indata, dvs. vi beräknar gradienten med avseende på den paddade inputen. Detta görs genom att för varje position i gradientmatrisen "sprida ut" kernelns vikter multiplicerade med gradientvärdet på rätt plats i en ny matris (av samma storlek som den paddade inputen). Detta är en så kallad full convolution med kernelns roterade matris.
+Vi beräknar sedan hur felet sprids bakåt till indatan, dvs. vi beräknar gradienten med avseende på den paddade inputen. Detta görs genom att för varje position i gradientmatrisen "sprida ut" kernelns vikter multiplicerade med gradientvärdet på rätt plats i en ny matris (av samma storlek som den paddade inputen).
 
 Vi använder:
 
-- Kernel (roterad 180°):
+- Kernel:
+
   ```
-  0.8 0.6
-  0.4 0.2
+  0.2 0.4
+  0.6 0.8
   ```
 
 - Gradientmatris från pooling-lagret (4x4):
@@ -437,51 +402,58 @@ Vi placerar ut varje kernel multiplicerat med respektive gradientvärde, och sum
 2. För varje position (i, j) i gradientmatrisen:
    - Lägg till kernel * grad[i, j] på position (i, j) i input-gradientmatrisen.
 
+Endast fyra gradienter är ej lika med 0, så vi behöver bara beräkna dessa:
+
+* dY(0,1)=10 → lägg 10 * K på dX i det övre vänstra hörnet på (0,1).
+* dY(0,2)=20 → lägg 20 * K på dX i det övre vänstra hörnet på (0,2).
+* dY(3,1)=30 → lägg 30 * K på dX i det övre vänstra hörnet på (3,1).
+* dY(3,3)=40 → lägg 40 * K på dX i det övre vänstra hörnet på (3,3).
+
 **Explicit uträkning för några positioner:**
 
 - På position (0,1) i input-gradientmatrisen (från grad[0,1]=10):
-  - 0.8 * 10 på (0,1)
-  - 0.6 * 10 på (0,2)
-  - 0.4 * 10 på (1,1)
-  - 0.2 * 10 på (1,2)
+  - dX(0,1) += 10 * 0.2 = 2
+  - dX(0,2) += 10 * 0.4 = 4
+  - dX(1,1) += 10 * 0.6 = 6
+  - dX(1,2) += 10 * 0.8 = 8
 - På position (0,2) i input-gradientmatrisen (från grad[0,2]=20):
-  - 0.8 * 20 på (0,2)
-  - 0.6 * 20 på (0,3)
-  - 0.4 * 20 på (1,2)
-  - 0.2 * 20 på (1,3)
+  - dX(0,2) += 20 * 0.2 = 4
+  - dX(0,3) += 20 * 0.4 = 8
+  - dX(1,2) += 20 * 0.6 = 12
+  - dX(1,3) += 20 * 0.8 = 16
 - På position (3,1) i input-gradientmatrisen (från grad[3,1]=30):
-  - 0.8 * 30 på (3,1)
-  - 0.6 * 30 på (3,2)
-  - 0.4 * 30 på (4,1)
-  - 0.2 * 30 på (4,2)
+  - dX(3,1) += 30 * 0.2 = 6
+  - dX(3,2) += 30 * 0.4 = 12
+  - dX(4,1) += 30 * 0.6 = 18
+  - dX(4,2) += 30 * 0.8 = 24
 - På position (3,3) i input-gradientmatrisen (från grad[3,3]=40):
-  - 0.8 * 40 på (3,3)
-  - 0.6 * 40 på (3,4)
-  - 0.4 * 40 på (4,3)
-  - 0.2 * 40 på (4,4)
-
-Fortsätt på detta sätt för alla positioner där grad[i,j] ≠ 0.
+  - dX(3,3) += 40 * 0.2 = 8
+  - dX(3,4) += 40 * 0.4 = 16
+  - dX(4,3) += 40 * 0.6 = 24
+  - dX(4,4) += 40 * 0.8 = 32
 
 **Slutlig input-gradientmatris (paddad):**
 
-Efter att ha summerat alla bidrag får vi:
+Efter att ha summerat alla bidrag får vi följande gradienter:
+
 ```
-0.0  8.0 22.0 12.0  0.0  0.0
-0.0  4.0 16.0 16.0  4.0  0.0
-0.0  0.0  8.0  8.0  0.0  0.0
-0.0 12.0 24.0 32.0 24.0 24.0
-0.0 12.0 12.0 16.0  8.0  8.0
-0.0  0.0  0.0  0.0  0.0  0.0
+0  2  8  8  0  0
+0  6 20 28  8  0
+0  0  0  0  0  0
+0  6 12  8 16  0
+0 18 24 24 32  0
+0  0  0  0  0  0
 ```
 
 **Extrahera opaddade gradienter:**
 
 Vi tar bort yttersta raden och kolumnen runt om för att få en 4x4-matris som matchar originalbilden:
+
 ```
-4.0 16.0 16.0  4.0
-0.0  8.0  8.0  0.0
-12.0 24.0 32.0 24.0
-12.0 12.0 16.0  8.0
+6 20 28  8
+0  0  0  0
+6 12  8 16
+18 24 24 32
 ```
 
 Detta är gradienten med avseende på indata, som skickas vidare bakåt i nätverket.
@@ -492,8 +464,8 @@ Detta är gradienten med avseende på indata, som skickas vidare bakåt i nätve
 Slutligen uppdaterar vi kernel och bias med hjälp av lärhastigheten `LR`:
 
 ```
-kernel = kernel − LR · kernelGradient
-bias   = bias   − LR · biasGradient
+kernel = kernel − LR  *  kernelGradient
+bias   = bias   − LR  *  biasGradient
 ```
 
 **Uppdaterad kernel:**
@@ -504,7 +476,7 @@ bias   = bias   − LR · biasGradient
 
 **Uppdaterad bias:**
 ```
--0.1
+0.4
 ```
 
 ---
