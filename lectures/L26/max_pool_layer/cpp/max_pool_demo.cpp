@@ -97,13 +97,23 @@ namespace ml
  * 
  * @todo Implement this structure!
  */
-struct MaxPool final
+struct MaxPoolLayer final
 {
     /**
      * @brief Constructor.
      * 
      * @param[in] inputSize Input size. Must be greater than 0.
      * @param[in] poolSize Pool size. Must divide the input size.
+     */
+
+    /**
+     * @todo Check the input arguments in the constructor:
+     * 
+     *       If the input size is 0, the pool size is 0, or the pool size does not divide the 
+     *       input size (inputSize % poolSize != 0), throw an exception with message
+     *       "Cannot create max pooling layer: invalid input arguments!".
+     *
+     *       Use std::invalid_argument for throwing.
      */
 
     /**
