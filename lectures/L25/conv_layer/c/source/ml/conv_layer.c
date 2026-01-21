@@ -134,7 +134,7 @@ static void conv_layer_extract_input_gradients(conv_layer_t* self)
 conv_layer_t* conv_layer_new(const size_t input_size, const size_t kernel_size)
 {
     // Check the input parameters, return null if invalid.
-    if ((0U == kernel_size) || (input_size < kernel_size)) { return NULL; }
+    if ((0U == kernel_size) || (0U == input_size) || (input_size < kernel_size)) { return NULL; }
 
     // Create new convolutional layer, return null on failure.
     conv_layer_t* self = (conv_layer_t*)(malloc(sizeof(conv_layer_t)));

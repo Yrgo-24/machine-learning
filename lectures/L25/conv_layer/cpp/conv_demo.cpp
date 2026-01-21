@@ -124,11 +124,21 @@ namespace ml
  */
 struct ConvLayer final
 {
-     /**
+    /**
      * @brief Constructor.
      * 
      * @param[in] inputSize Input size. Must be greater than 0.
      * @param[in] kernelSize Kernel size. Must be greater than 0 and smaller than the input size.
+     */
+    
+    /**
+     * @todo Check the input arguments in the constructor:
+     * 
+     *       If the input size is 0, the kernel size is 0, or the input size is smaller than
+     *       the kernel size, throw an exception with message
+     *       "Cannot create convolutional layer: invalid input arguments!".
+     *
+     *       Use std::invalid_argument for throwing.
      */
 
     /**

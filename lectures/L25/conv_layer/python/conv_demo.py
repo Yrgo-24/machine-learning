@@ -65,7 +65,7 @@ class ConvLayer:
     def __init__(self, input_size: int, kernel_size: int) -> None:
 
         # Check the input parameters, throw an exception if invalid.
-        if kernel_size == 0 or input_size < kernel_size:
+        if kernel_size == 0 or input_size == 0 or input_size < kernel_size:
             raise ValueError("Cannot create convolutional layer: invalid input arguments!")
 
         # Calculate the padded image size.
