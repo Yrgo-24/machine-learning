@@ -20,6 +20,7 @@ Testkör programmet via kommandot `python3 conv_demo.py` i terminalen i motsvara
     för att använda conv-lager.
     * Struktens medlemsvariabler hålls därmed privata, på samma sätt som nyckelordet `private` används i C++. 
     * Här demonstreras även hur matriser kan implementeras i C via strukten [matrix_t](./conv_layer/c/include/ml/matrix.h).
+* Lektionsanteckningar finns [här](./notes/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
