@@ -20,6 +20,7 @@ Testkör programmet via kommandot `python3 max_pool_demo.py` i terminalen i mots
     för att använda maxpooling-lager.
     * Struktens medlemsvariabler hålls därmed privata, på samma sätt som nyckelordet `private` används i C++. 
     * Här demonstreras även hur matriser kan implementeras i C via strukten [matrix_t](./max_pool_layer/c/include/ml/matrix.h).
+* Lektionsanteckningar finns [här](./notes/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
