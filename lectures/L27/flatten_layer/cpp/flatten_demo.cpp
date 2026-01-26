@@ -155,6 +155,15 @@ struct FlattenLayer final
      */
 
     /**
+     * @todo Check the input size in the constructor:
+     * 
+     *       If the input size is 0, throw an exception with message
+     *       "Cannot create flatten layer: invalid input size!".
+     *
+     *       Use std::invalid_argument for throwing.
+     */
+
+    /**
      * @brief Flatten the input from 2D to 1D.
      * 
      * @param[in] input Matrix holding input data.
@@ -162,7 +171,7 @@ struct FlattenLayer final
      * @return True on success, false on failure.
      */
 
-     /**
+    /**
      * @brief Unflatten the output gradients from 1D to 2D.
      * 
      * @param[in] outputGradients Matrix holding output gradients.
@@ -196,7 +205,7 @@ int main()
 
     // Create a flatten layer: 4x4 input, produces 1x16 output.
     constexpr std::size_t inputSize{4U};
-    FlattenLayer flattenLayer{inputSize};
+    ml::FlattenLayer flattenLayer{inputSize};
 
     // Perform feedforward (flatten the input), print the result.
     std::cout << "Flattening input data (2D -> 1D):\n";
@@ -206,10 +215,10 @@ int main()
     printMatrix(flattenLayer.output);
 
     // Perform backpropagation (unflatten the output), print the result.
-    std::cout << "Applying backpropagation (1D -> 2D):\n";
+    std::cout << "\nApplying backpropagation (1D -> 2D):\n";
     printMatrix(outputGradients);
     flattenLayer.backpropagate(outputGradients);
-    std::cout << "Resulting unflattened input gradients (2D):\n";
+    std::cout << "\nResulting unflattened input gradients (2D):\n";
     printMatrix(flattenLayer.inputGradients);
     return 0;
 
