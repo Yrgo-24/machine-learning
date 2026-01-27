@@ -20,6 +20,7 @@ Testkör programmet via kommandot `python3 flatten_demo.py` i terminalen i motsv
     för att använda flatten-lager.
     * Struktens medlemsvariabler hålls därmed privata, på samma sätt som nyckelordet `private` används i C++. 
     * Här demonstreras även hur matriser kan implementeras i C via strukten [matrix_t](./flatten_layer/c/include/ml/matrix.h).
+* Lektionsanteckningar finns [här](./notes/README.md).
 
 ## Utvärdering
 * Några synpunkter på lektionen i sig?
